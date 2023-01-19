@@ -10,7 +10,7 @@ export default function Messages() {
 
   const utils = api.useContext()
 
-  const { data: messages, isLoading } = api.guestbook.getAll.useQuery()
+  const { data: messages } = api.guestbook.getAll.useQuery()
   const postMessage = api.guestbook.postMessage.useMutation({
     // https://create.t3.gg/en/usage/trpc#optimistic-updates
     async onMutate(newPost) {
@@ -21,7 +21,9 @@ export default function Messages() {
       const prevData = utils.guestbook.getAll.getData()
 
       // Optimistically update the data with our new post
-      utils.guestbook.getAll.setData(undefined, old => [newPost, ...old])
+      utils.guestbook.getAll.setData(undefined, old => {
+        return [newPost, ...(old || [])]
+      })
 
       // Return the previous data so we can revert if something goes wrong
       return { prevData }
@@ -41,13 +43,19 @@ export default function Messages() {
         <>
           <p>hi {session.user?.name}</p>
 
-          <Button onClick={() => signOut()}>logout</Button>
+          <Button
+            onClick={() => {
+              signOut().catch(err => console.log(err))
+            }}
+          >
+            logout
+          </Button>
           <form
             className='space-y-4'
             onSubmit={e => {
               e.preventDefault()
               postMessage.mutate({
-                name: session.user?.name,
+                name: session.user?.name ?? '',
                 message,
               })
 
@@ -66,7 +74,13 @@ export default function Messages() {
           </form>
         </>
       ) : (
-        <Button onClick={() => signIn('discord')}>login with discord</Button>
+        <Button
+          onClick={() => {
+            signIn('discord').catch(err => console.log(err))
+          }}
+        >
+          login with discord
+        </Button>
       )}
       <div className='bg-cobalt'>
         <h2>messages</h2>

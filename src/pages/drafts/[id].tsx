@@ -77,7 +77,10 @@ const Draft: NextPage = () => {
 
       // Optimistically update the data with our new post
       // utils.drafts.get.setData(undefined, old => [newDraft, ...old])
-      utils.drafts.get.setData({ id }, () => newDraft)
+      // TODO
+      // utils.drafts.get.setData({ id }, old => {
+      //   return newDraft
+      // })
 
       // Return the previous data so we can revert if something goes wrong
       return { prevData }
