@@ -1,0 +1,8 @@
+{
+  "name": "tetree",
+  "short_name": "tetree",
+  "lang": "en-US",
+  "start_url": "/",
+  "display": "standalone",
+  "scope": "/"
+}
