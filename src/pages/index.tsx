@@ -1,5 +1,6 @@
 import { type NextPage } from 'next'
 import { useRouter } from 'next/router'
+import { signIn, signOut, useSession } from 'next-auth/react'
 
 import Page from '@/components/page'
 import Main from '@/components/design/main'
@@ -60,6 +61,8 @@ const League = ({ items, teams }: { items: string[]; teams: string[] }) => {
 
 const Home: NextPage = () => {
   const { push } = useRouter()
+  const { data: session } = useSession()
+
   const [itemsText, setItemsText] = useLocalStorage('items', '')
   const [teamsText, setTeamsText] = useLocalStorage('teams', '')
 
@@ -84,6 +87,34 @@ const Home: NextPage = () => {
   return (
     <Page>
       <Main className='flex flex-col px-2'>
+        {session ? (
+          <details>
+            <summary>
+              <h2 className='inline'>logout</h2>
+            </summary>
+            <Button
+              onClick={() => {
+                signOut().catch(err => console.log(err))
+              }}
+            >
+              logout
+            </Button>
+          </details>
+        ) : (
+          <details>
+            <summary>
+              <h2 className='inline'>login with discord</h2>
+            </summary>
+            <Button
+              onClick={() => {
+                signIn('discord').catch(err => console.log(err))
+              }}
+            >
+              login with discord
+            </Button>
+          </details>
+        )}
+
         <h2>all drafts</h2>
         <ul>
           {drafts?.map(draft => (
