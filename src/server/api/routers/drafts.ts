@@ -60,19 +60,4 @@ export const draftsRouter = createTRPCRouter({
         console.log(error)
       }
     }),
-  // getAll: publicProcedure.query(async ({ ctx }) => {
-  //   try {
-  //     return await ctx.prisma.guestbook.findMany({
-  //       select: {
-  //         name: true,
-  //         message: true,
-  //       },
-  //       orderBy: {
-  //         createdAt: 'desc',
-  //       },
-  //     })
-  //   } catch (error) {
-  //     console.log(error)
-  //   }
-  // }),
 })
