@@ -90,7 +90,7 @@ const Home: NextPage = () => {
         {session ? (
           <details>
             <summary>
-              <h2 className='inline'>logout</h2>
+              <h2 className='inline'>{session.user?.name}</h2>
             </summary>
             <Button
               onClick={() => {
