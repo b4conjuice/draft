@@ -23,7 +23,7 @@ const Home: NextPage = () => {
   const teams = teamsText ? teamsText.split('\n').filter(item => item) : []
 
   const { data: drafts, isLoading } = api.drafts.getAll.useQuery()
-  const updateDraft = api.drafts.update.useMutation()
+  const saveDraft = api.drafts.save.useMutation()
 
   if (isLoading) {
     return (
@@ -33,8 +33,8 @@ const Home: NextPage = () => {
     )
   }
 
-  if (updateDraft.isSuccess) {
-    const id = updateDraft.data?.id ?? ''
+  if (saveDraft.isSuccess) {
+    const id = saveDraft.data?.id ?? ''
     push(`/drafts/${id}`).catch(err => console.log(err))
   }
   return (
@@ -85,7 +85,7 @@ const Home: NextPage = () => {
               className='space-y-2'
               onSubmit={e => {
                 e.preventDefault()
-                updateDraft.mutate({
+                saveDraft.mutate({
                   items,
                   teams,
                 })

@@ -27,7 +27,7 @@ export const draftsRouter = createTRPCRouter({
       console.log(error)
     }
   }),
-  update: protectedProcedure
+  save: protectedProcedure
     .input(
       z.object({
         id: z.string().nullish(),
