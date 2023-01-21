@@ -19,11 +19,7 @@ export default function Draft({ draft }: { draft: Draft }) {
       const prevData = utils.drafts.get.getData()
 
       // Optimistically update the data with our new post
-      // utils.drafts.get.setData(undefined, old => [newDraft, ...old])
-      // TODO
-      // utils.drafts.get.setData({ id }, old => {
-      //   return newDraft
-      // })
+      utils.drafts.get.setData({ id }, () => newDraft as Draft)
 
       // Return the previous data so we can revert if something goes wrong
       return { prevData }
