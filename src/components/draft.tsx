@@ -2,6 +2,7 @@ import type { Draft } from '@prisma/client'
 
 import Button from '@/components/design/button'
 import League from '@/components/league'
+import DragDropList from '@/components/dragDropList'
 import copyToClipboard from '@/lib/copyToClipboard'
 import useForm from '@/lib/useForm'
 import { api } from '@/lib/api'
@@ -104,6 +105,23 @@ export default function Draft({ draft }: { draft: Draft }) {
               <li key={index}>{item}</li>
             ))}
           </ol>
+          <h2>reorder</h2>
+          <DragDropList
+            items={itemsAsArray.map(item => ({ id: item, item }))}
+            renderItem={({ item }: { item: string }, index: number) => (
+              <div>
+                {index + 1}. {item}
+              </div>
+            )}
+            setItems={newItems => {
+              updateDraft.mutate({
+                id,
+                title: title as string,
+                items: newItems.map(({ item }) => item),
+                teams: teamsAsArray,
+              })
+            }}
+          />
           <Button
             onClick={() =>
               copyToClipboard(
