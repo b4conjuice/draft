@@ -6,6 +6,6 @@ const Main = ({
 }: {
   className?: string
   children?: React.ReactNode
-}) => <main className={classnames('flex', className)}>{children}</main>
+}) => <main className={classnames('flex-grow', className)}>{children}</main>
 
 export default Main

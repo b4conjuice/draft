@@ -2,9 +2,11 @@ import { type NextPage } from 'next'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
 import { signIn, signOut, useSession } from 'next-auth/react'
+import { ArrowDownOnSquareIcon } from '@heroicons/react/24/solid'
 
 import Page from '@/components/page'
 import Main from '@/components/design/main'
+import Footer, { FooterListItem } from '@/components/design/footer'
 import Button from '@/components/design/button'
 import Loading from '@/components/loading'
 import League from '@/components/league'
@@ -23,7 +25,11 @@ const Home: NextPage = () => {
   const teams = teamsText ? teamsText.split('\n').filter(item => item) : []
 
   const { data: drafts, isLoading } = api.drafts.getAll.useQuery()
-  const saveDraft = api.drafts.save.useMutation()
+  const {
+    data: draft,
+    mutate: saveDraft,
+    isSuccess,
+  } = api.drafts.save.useMutation()
 
   if (isLoading) {
     return (
@@ -33,13 +39,13 @@ const Home: NextPage = () => {
     )
   }
 
-  if (saveDraft.isSuccess) {
-    const id = saveDraft.data?.id ?? ''
+  if (isSuccess && draft) {
+    const id = draft.id ?? ''
     push(`/drafts/${id}`).catch(err => console.log(err))
   }
   return (
     <Page>
-      <Main className='flex flex-col px-2'>
+      <Main className='flex flex-col px-4'>
         {session ? (
           <details>
             <summary>
@@ -81,34 +87,23 @@ const Home: NextPage = () => {
         {session && (
           <div className='space-y-4'>
             <h2>new draft</h2>
-            <form
-              className='space-y-2'
-              onSubmit={e => {
-                e.preventDefault()
-                saveDraft.mutate({
-                  items,
-                  teams,
-                })
-              }}
-            >
-              <h2>items</h2>
+            <h2>items</h2>
+            <textarea
+              className='w-full bg-cobalt'
+              value={itemsText}
+              onChange={e => setItemsText(e.target.value)}
+            />
+            <details>
+              <summary>
+                <h2 className='inline'>teams</h2>
+              </summary>
               <textarea
                 className='w-full bg-cobalt'
-                value={itemsText}
-                onChange={e => setItemsText(e.target.value)}
+                value={teamsText}
+                onChange={e => setTeamsText(e.target.value)}
               />
-              <details>
-                <summary>
-                  <h2 className='inline'>teams</h2>
-                </summary>
-                <textarea
-                  className='w-full bg-cobalt'
-                  value={teamsText}
-                  onChange={e => setTeamsText(e.target.value)}
-                />
-              </details>
-              <Button type='submit'>save</Button>
-            </form>
+            </details>
+
             {items.length > 0 && (
               <>
                 <h2>drafted</h2>
@@ -139,6 +134,22 @@ const Home: NextPage = () => {
           </div>
         )}
       </Main>
+      <Footer>
+        <FooterListItem
+          onClick={e => {
+            e.preventDefault()
+            saveDraft({
+              items,
+              teams,
+            })
+            setItemsText('')
+            setTeamsText('')
+          }}
+          disabled={items.length === 0 || teams.length === 0}
+        >
+          <ArrowDownOnSquareIcon className='h-6 w-6' />
+        </FooterListItem>
+      </Footer>
     </Page>
   )
 }

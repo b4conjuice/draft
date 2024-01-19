@@ -60,4 +60,21 @@ export const draftsRouter = createTRPCRouter({
         console.log(error)
       }
     }),
+  delete: protectedProcedure
+    .input(
+      z.object({
+        id: z.string(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      try {
+        return await ctx.prisma.draft.delete({
+          where: {
+            id: input.id,
+          },
+        })
+      } catch (error) {
+        console.log(error)
+      }
+    }),
 })
