@@ -1,16 +1,15 @@
-import { type NextPage } from 'next'
 import { useRouter } from 'next/router'
 import type { Draft as DraftType } from '@prisma/client'
+import { TrashIcon } from '@heroicons/react/24/solid'
 
 import Page from '@/components/page'
 import Main from '@/components/design/main'
+import Footer, { FooterListItem } from '@/components/design/footer'
 import Loading from '@/components/loading'
 import Draft from '@/components/draft'
 import { api } from '@/lib/api'
-import Footer, { FooterListItem } from '@/components/design/footer'
-import { TrashIcon } from '@heroicons/react/24/solid'
 
-const DraftPage: NextPage = () => {
+export default function DraftPage() {
   const {
     query: { id: initialId },
     push,
@@ -53,5 +52,3 @@ const DraftPage: NextPage = () => {
     </Page>
   )
 }
-
-export default DraftPage

@@ -1,4 +1,3 @@
-import { type NextPage } from 'next'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
 import { signIn, signOut, useSession } from 'next-auth/react'
@@ -14,7 +13,7 @@ import copyToClipboard from '@/lib/copyToClipboard'
 import useLocalStorage from '@/lib/useLocalStorage'
 import { api } from '@/lib/api'
 
-const Home: NextPage = () => {
+export default function Home() {
   const { push } = useRouter()
   const { data: session } = useSession()
 
@@ -153,5 +152,3 @@ const Home: NextPage = () => {
     </Page>
   )
 }
-
-export default Home
