@@ -4,9 +4,7 @@ import { ClerkProvider } from '@clerk/nextjs'
 import { TRPCReactProvider } from '@/trpc/react'
 
 import '@/styles/globals.css'
-import TopNav from './_components/topNav'
-
-const DEFAULT_TITLE = 'draft'
+import { DEFAULT_TITLE } from '@/lib/defaults'
 
 export const metadata = {
   manifest: '/manifest.json',
@@ -34,7 +32,6 @@ export default function RootLayout({
         <body>
           <TRPCReactProvider>
             <div className='flex min-h-screen flex-col bg-cb-dark-blue text-cb-white'>
-              <TopNav title={DEFAULT_TITLE} />
               {children}
             </div>
           </TRPCReactProvider>
