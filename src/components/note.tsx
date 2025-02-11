@@ -5,6 +5,7 @@ import { SignedIn } from '@clerk/nextjs'
 
 import { Footer, FooterListItem, Main } from '@/components/ui'
 import useLocalStorage from '@/lib/useLocalStorage'
+import { saveRelatedDraft, saveNote } from '@/server/actions'
 
 export default function Note() {
   const [text, setText] = useLocalStorage('homepage-items', '')
@@ -35,11 +36,11 @@ export default function Note() {
                 list: [],
                 tags: [],
               }
-              // const noteId = await saveNote(newNote)
-              // const newDraft = {
-              //   noteId,
-              // }
-              // await saveDraft(newDraft)
+              const noteId = await saveNote(newNote)
+              const newDraft = {
+                noteId,
+              }
+              await saveRelatedDraft(newDraft)
               setText('')
               // router.push(`/draft/${noteId}`)
             }}

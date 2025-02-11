@@ -1,7 +1,7 @@
 // Example model schema from the Drizzle docs
 // https://orm.drizzle.team/docs/sql-schema-declaration
 
-import { sql } from 'drizzle-orm'
+import { relations, sql } from 'drizzle-orm'
 import {
   integer,
   pgTable,
@@ -37,9 +37,10 @@ export const notes = pgTable('n4_note', {
 })
 
 export const drafts = createTable('draft', {
-  id: integer('id').primaryKey().generatedByDefaultAsIdentity(),
-  title: varchar('title', { length: 256 }),
-  items: text('items').array().notNull(),
+  // id: integer('id').primaryKey().generatedByDefaultAsIdentity(),
+  noteId: integer('note_id')
+    .references(() => notes.id)
+    .primaryKey(),
   teams: text('teams').array().notNull(),
   createdAt: timestamp('created_at', { withTimezone: true })
     .default(sql`CURRENT_TIMESTAMP`)
@@ -48,3 +49,10 @@ export const drafts = createTable('draft', {
     () => new Date()
   ),
 })
+
+export const draftsRelations = relations(drafts, ({ one }) => ({
+  note: one(notes, {
+    fields: [drafts.noteId],
+    references: [notes.id],
+  }),
+}))
