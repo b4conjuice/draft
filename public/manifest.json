@@ -1,0 +1,8 @@
+{
+  "name": "draft",
+  "short_name": "draft",
+  "lang": "en-US",
+  "start_url": "/",
+  "display": "standalone",
+  "scope": "/"
+}
