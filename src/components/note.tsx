@@ -1,5 +1,6 @@
 'use client'
 
+import { useRouter } from 'next/navigation'
 import { ArrowDownOnSquareIcon } from '@heroicons/react/20/solid'
 import { SignedIn } from '@clerk/nextjs'
 
@@ -8,6 +9,7 @@ import useLocalStorage from '@/lib/useLocalStorage'
 import { saveRelatedDraft, saveNote } from '@/server/actions'
 
 export default function Note() {
+  const router = useRouter()
   const [text, setText] = useLocalStorage('homepage-items', '')
   const hasChanges = text !== ''
   const canSave = !(!hasChanges || text === '')
@@ -42,7 +44,7 @@ export default function Note() {
               }
               await saveRelatedDraft(newDraft)
               setText('')
-              // router.push(`/draft/${noteId}`)
+              router.push(`/drafts/${noteId}`)
             }}
             disabled={!canSave}
           >
