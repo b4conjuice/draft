@@ -1,10 +1,10 @@
-import { Main, Title } from '@/components/ui'
+import { Main } from '@/components/ui'
 
 export default function Home() {
   return (
-    <Main className='flex flex-col p-4'>
-      <div className='flex flex-grow flex-col items-center justify-center space-y-4'>
-        <Title>draft</Title>
+    <Main className='flex flex-col'>
+      <div className='flex flex-grow flex-col space-y-4'>
+        <textarea className='h-full w-full flex-grow border-none bg-cobalt caret-cb-yellow focus:ring-0' />
       </div>
     </Main>
   )
