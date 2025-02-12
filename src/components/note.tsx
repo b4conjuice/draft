@@ -18,7 +18,7 @@ export default function Note() {
       <Main className='flex flex-col'>
         <div className='flex flex-grow flex-col space-y-4'>
           <textarea
-            className='h-full w-full flex-grow border-none bg-cobalt caret-cb-yellow focus:ring-0'
+            className='h-full w-full flex-grow border-cobalt bg-cobalt caret-cb-yellow focus:border-cb-mint focus:ring-0'
             value={text}
             onChange={e => {
               setText(e.target.value)

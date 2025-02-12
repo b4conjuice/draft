@@ -53,7 +53,7 @@ export default function DraftForm({
         >
           <h2 className='px-2'>{title}</h2>
           <textarea
-            className='w-full flex-grow bg-cobalt'
+            className='w-full flex-grow border-cobalt bg-cobalt caret-cb-yellow focus:border-cb-mint focus:ring-0'
             placeholder='title'
             {...register('items', { required: true })}
           />
@@ -67,13 +67,13 @@ export default function DraftForm({
           <label className='px-2'>title</label>
           <input
             type='text'
-            className='w-full bg-cobalt'
+            className='w-full border-cobalt bg-cobalt focus:border-cb-mint focus:ring-0'
             placeholder='title'
             {...register('title', { required: true })}
           />
           <label className='px-2'>teams</label>
           <textarea
-            className='w-full flex-grow bg-cobalt'
+            className='w-full flex-grow border-cobalt bg-cobalt caret-cb-yellow focus:border-cb-mint focus:ring-0'
             placeholder='teams'
             {...register('teams')}
           />
