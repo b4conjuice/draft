@@ -5,6 +5,7 @@ import { type SubmitHandler, useForm } from 'react-hook-form'
 import classNames from 'classnames'
 import {
   ArrowDownOnSquareIcon,
+  ChevronLeftIcon,
   Cog6ToothIcon,
   ListBulletIcon,
 } from '@heroicons/react/20/solid'
@@ -12,6 +13,7 @@ import {
 import { Main } from '@/components/ui'
 import { saveDraft } from '@/server/actions'
 import { type DraftFields } from '@/lib/types'
+import Link from 'next/link'
 
 export default function DraftForm({
   id,
@@ -80,7 +82,15 @@ export default function DraftForm({
         </div>
       </Main>
       <footer className='flex items-center justify-between bg-cb-dark-blue px-2 py-1'>
-        <div className='flex space-x-3'>
+        <div className='flex space-x-4'>
+          <Link
+            href='/drafts'
+            className='text-cb-yellow hover:text-cb-yellow/75'
+          >
+            <ChevronLeftIcon className='h-6 w-6' />
+          </Link>
+        </div>
+        <div className='flex space-x-4'>
           <button
             className='text-cb-yellow hover:text-cb-yellow/75 disabled:pointer-events-none disabled:opacity-25'
             type='button'
@@ -94,8 +104,6 @@ export default function DraftForm({
               <ListBulletIcon className='h-6 w-6' />
             )}
           </button>
-        </div>
-        <div className='flex space-x-3'>
           <button
             className='flex w-full justify-center py-2 text-cb-yellow hover:text-cb-yellow disabled:pointer-events-none disabled:opacity-25'
             type='submit'
