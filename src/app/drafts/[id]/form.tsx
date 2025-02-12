@@ -9,7 +9,7 @@ import {
   ListBulletIcon,
 } from '@heroicons/react/20/solid'
 
-import { Footer, FooterListItem, Main } from '@/components/ui'
+import { Main } from '@/components/ui'
 import { saveDraft } from '@/server/actions'
 import { type DraftFields } from '@/lib/types'
 
@@ -43,18 +43,15 @@ export default function DraftForm({
     })
   }
   return (
-    <form
-      className='flex flex-grow flex-col space-y-4'
-      onSubmit={handleSubmit(onSubmit)}
-    >
-      <Main className='flex flex-col px-4 pb-4'>
+    <form className='flex flex-grow flex-col' onSubmit={handleSubmit(onSubmit)}>
+      <Main className='flex flex-col'>
         <div
           className={classNames(
-            'flex flex-grow flex-col space-y-4',
+            'flex flex-grow flex-col',
             showItems ? '' : 'hidden'
           )}
         >
-          <h2>{title}</h2>
+          <h2 className='px-2'>{title}</h2>
           <textarea
             className='w-full flex-grow bg-cobalt'
             placeholder='title'
@@ -63,16 +60,18 @@ export default function DraftForm({
         </div>
         <div
           className={classNames(
-            'flex flex-grow flex-col space-y-4',
+            'flex flex-grow flex-col',
             showItems ? 'hidden' : ''
           )}
         >
+          <label className='px-2'>title</label>
           <input
             type='text'
             className='w-full bg-cobalt'
             placeholder='title'
             {...register('title', { required: true })}
           />
+          <label className='px-2'>teams</label>
           <textarea
             className='w-full flex-grow bg-cobalt'
             placeholder='teams'
@@ -80,28 +79,32 @@ export default function DraftForm({
           />
         </div>
       </Main>
-      <Footer>
-        <FooterListItem
-          onClick={() => {
-            setShowItems(!showItems)
-          }}
-        >
-          {showItems ? (
-            <Cog6ToothIcon className='h-6 w-6' />
-          ) : (
-            <ListBulletIcon className='h-6 w-6' />
-          )}
-        </FooterListItem>
-        <FooterListItem>
+      <footer className='flex items-center justify-between bg-cb-dark-blue px-2 py-1'>
+        <div className='flex space-x-3'>
           <button
-            className='flex w-full justify-center py-2 disabled:pointer-events-none disabled:opacity-25'
+            className='text-cb-yellow hover:text-cb-yellow/75 disabled:pointer-events-none disabled:opacity-25'
+            type='button'
+            onClick={() => {
+              setShowItems(!showItems)
+            }}
+          >
+            {showItems ? (
+              <Cog6ToothIcon className='h-6 w-6' />
+            ) : (
+              <ListBulletIcon className='h-6 w-6' />
+            )}
+          </button>
+        </div>
+        <div className='flex space-x-3'>
+          <button
+            className='flex w-full justify-center py-2 text-cb-yellow hover:text-cb-yellow disabled:pointer-events-none disabled:opacity-25'
             type='submit'
             disabled={!isDirty}
           >
             <ArrowDownOnSquareIcon className='h-6 w-6' />
           </button>
-        </FooterListItem>
-      </Footer>
+        </div>
+      </footer>
     </form>
   )
 }
