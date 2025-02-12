@@ -17,7 +17,7 @@ export default async function DraftListPage() {
           <ul className='divide-y divide-cb-dusty-blue'>
             {notes.map(note => (
               <li key={note.id} className='flex py-4 first:pt-0 last:pb-0'>
-                <span className='flex grow items-center justify-between text-cb-pink hover:text-cb-pink/75'>
+                <span className='flex grow items-center justify-between'>
                   <div>
                     <div>{note.title}</div>
                     {note.tags && note.tags.length > 0 && (
