@@ -9,7 +9,7 @@ export default async function DraftListPage() {
   return (
     <>
       <TopNav />
-      <Main className='flex flex-col px-4'>
+      <Main className='flex flex-col px-2'>
         <div className='flex flex-grow flex-col space-y-4'>
           <ul className='divide-y divide-cb-dusty-blue'>
             {notes.map(note => (
