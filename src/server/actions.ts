@@ -1,7 +1,7 @@
 'use server'
 
 import { auth } from '@clerk/nextjs/server'
-import { and } from 'drizzle-orm'
+import { and, desc, eq } from 'drizzle-orm'
 
 import { db } from './db'
 import { type DraftFields, type Note } from '@/lib/types'
@@ -59,11 +59,17 @@ export async function getNotes() {
 
   if (!user.userId) throw new Error('unauthorized')
 
-  const notes = await db.query.notes.findMany({
-    where: (model, { eq }) => eq(model.author, user.userId),
-    orderBy: (model, { desc }) => desc(model.updatedAt),
-  })
-  return notes
+  const results = await db
+    .select()
+    .from(notes)
+    .leftJoin(drafts, eq(notes.id, drafts.noteId))
+    .where(eq(notes.author, user.userId))
+    .orderBy(desc(notes.updatedAt))
+
+  return results.map(result => ({
+    ...result.n4_note,
+    hasPodcast: Boolean(result.draft),
+  }))
 }
 
 export async function saveRelatedDraft({
