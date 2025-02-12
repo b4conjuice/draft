@@ -1,10 +1,14 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
-import { ArrowDownOnSquareIcon } from '@heroicons/react/20/solid'
+import Link from 'next/link'
+import {
+  ArrowDownOnSquareIcon,
+  ChevronLeftIcon,
+} from '@heroicons/react/20/solid'
 import { SignedIn } from '@clerk/nextjs'
 
-import { Footer, FooterListItem, Main } from '@/components/ui'
+import { Main } from '@/components/ui'
 import useLocalStorage from '@/lib/useLocalStorage'
 import { saveRelatedDraft, saveNote } from '@/server/actions'
 
@@ -27,30 +31,42 @@ export default function Note() {
         </div>
       </Main>
       <SignedIn>
-        <Footer>
-          <FooterListItem
-            onClick={async () => {
-              const [title, ...body] = text.split('\n\n')
-              const newNote = {
-                text,
-                title: title ?? '',
-                body: body.join('\n\n'),
-                list: [],
-                tags: [],
-              }
-              const noteId = await saveNote(newNote)
-              const newDraft = {
-                noteId,
-              }
-              await saveRelatedDraft(newDraft)
-              setText('')
-              router.push(`/drafts/${noteId}`)
-            }}
-            disabled={!canSave}
-          >
-            <ArrowDownOnSquareIcon className='h-6 w-6' />
-          </FooterListItem>
-        </Footer>
+        <footer className='flex items-center justify-between bg-cb-dark-blue px-2 py-1'>
+          <div className='flex space-x-4'>
+            <Link
+              href='/drafts'
+              className='text-cb-yellow hover:text-cb-yellow/75'
+            >
+              <ChevronLeftIcon className='h-6 w-6' />
+            </Link>
+          </div>
+          <div className='flex space-x-4'>
+            <button
+              className='flex w-full justify-center py-2 text-cb-yellow hover:text-cb-yellow disabled:pointer-events-none disabled:opacity-25'
+              type='button'
+              onClick={async () => {
+                const [title, ...body] = text.split('\n\n')
+                const newNote = {
+                  text,
+                  title: title ?? '',
+                  body: body.join('\n\n'),
+                  list: [],
+                  tags: [],
+                }
+                const noteId = await saveNote(newNote)
+                const newDraft = {
+                  noteId,
+                }
+                await saveRelatedDraft(newDraft)
+                setText('')
+                router.push(`/drafts/${noteId}`)
+              }}
+              disabled={!canSave}
+            >
+              <ArrowDownOnSquareIcon className='h-6 w-6' />
+            </button>
+          </div>
+        </footer>
       </SignedIn>
     </>
   )
