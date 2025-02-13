@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import Link from 'next/link'
 import { type SubmitHandler, useForm } from 'react-hook-form'
 import classNames from 'classnames'
 import {
@@ -12,20 +13,10 @@ import {
 
 import { Main } from '@/components/ui'
 import { saveDraft } from '@/server/actions'
-import { type DraftFields } from '@/lib/types'
-import Link from 'next/link'
+import { type DraftNote, type DraftFields } from '@/lib/types'
 
-export default function DraftForm({
-  id,
-  title,
-  teams,
-  items,
-}: {
-  id: number
-  title: string
-  teams: string[]
-  items: string[]
-}) {
+export default function DraftForm(draft: DraftNote) {
+  const { title, teams, items } = draft
   const [showItems, setShowItems] = useState(true)
   const {
     register,
@@ -40,8 +31,10 @@ export default function DraftForm({
   })
   const onSubmit: SubmitHandler<DraftFields> = async data => {
     await saveDraft({
-      noteId: id,
-      ...data,
+      ...draft,
+      title: data.title,
+      teams: data.teams.split('\n'),
+      items: data.items.split('\n'),
     })
   }
   return (

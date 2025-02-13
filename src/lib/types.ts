@@ -8,12 +8,13 @@ export type Note = {
 }
 
 export type Draft = {
-  id: number
   title: string
   items: string[]
   teams: string[]
   // categories?: string[]
 }
+
+export type DraftNote = Note & Draft & { id: number }
 
 export type DraftFields = {
   title: string

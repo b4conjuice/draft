@@ -49,14 +49,10 @@ export default async function DraftPage({
   const id = Number((await params).id)
   const draft = await getDraft(id)
 
-  const draftForm = {
-    ...draft,
-    id,
-  }
   return (
     <>
       <TopNav />
-      <DraftForm {...draftForm} />
+      <DraftForm {...draft} />
     </>
   )
 }

@@ -4,7 +4,7 @@ import { auth } from '@clerk/nextjs/server'
 import { and, desc, eq } from 'drizzle-orm'
 
 import { db } from './db'
-import { type DraftFields, type Note } from '@/lib/types'
+import { type DraftNote, type Note } from '@/lib/types'
 import { drafts, notes } from './db/schema'
 
 export async function getNote(noteId: number) {
@@ -115,7 +115,8 @@ export async function getDraft(noteId: number) {
   const { teams } = relatedDraft
   const { title, body } = note
 
-  const draft = {
+  const draft: DraftNote = {
+    ...note,
     title,
     items: body.split('\n'),
     teams,
@@ -124,22 +125,21 @@ export async function getDraft(noteId: number) {
   return draft
 }
 
-export async function saveDraft(draft: DraftFields & { noteId: number }) {
+export async function saveDraft(draft: DraftNote) {
   const user = await auth()
 
   if (!user.userId) throw new Error('unauthorized')
 
-  const { noteId, title, items, teams } = draft
+  const { id, title, items, teams } = draft
 
-  await saveRelatedDraft({ noteId, teams: teams.split('\n') })
+  await saveRelatedDraft({ noteId: id, teams })
 
+  const body = items.join('\n')
   const updatedNote = {
-    id: noteId,
-    text: `${title}\n\n${items}`,
+    ...draft,
+    text: `${title}\n\n${body}`,
     title,
-    body: items,
-    list: [], // TODO
-    tags: [], // TODO: updates unexpectedly
+    body,
   }
   await saveNote(updatedNote)
 }
