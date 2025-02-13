@@ -74,7 +74,7 @@ export default function DraftForm(draft: DraftNote) {
           />
         </div>
       </Main>
-      <footer className='flex items-center justify-between bg-cb-dark-blue px-2 py-1'>
+      <footer className='flex items-center justify-between bg-cb-dark-blue px-2 pb-4 pt-2'>
         <div className='flex space-x-4'>
           <Link
             href='/drafts'
@@ -98,7 +98,7 @@ export default function DraftForm(draft: DraftNote) {
             )}
           </button>
           <button
-            className='flex w-full justify-center py-2 text-cb-yellow hover:text-cb-yellow disabled:pointer-events-none disabled:opacity-25'
+            className='flex w-full justify-center text-cb-yellow hover:text-cb-yellow disabled:pointer-events-none disabled:opacity-25'
             type='submit'
             disabled={!isDirty}
           >
