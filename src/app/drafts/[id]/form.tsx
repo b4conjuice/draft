@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { type SubmitHandler, useForm } from 'react-hook-form'
 import classNames from 'classnames'
@@ -21,7 +21,9 @@ export default function DraftForm(draft: DraftNote) {
   const {
     register,
     handleSubmit,
-    formState: { isDirty },
+    formState: { isDirty, isSubmitSuccessful },
+    reset,
+    getValues,
   } = useForm<DraftFields>({
     defaultValues: {
       title,
@@ -29,6 +31,11 @@ export default function DraftForm(draft: DraftNote) {
       items: items.join('\n'),
     },
   })
+  useEffect(() => {
+    if (isSubmitSuccessful) {
+      reset(getValues())
+    }
+  }, [isSubmitSuccessful, reset])
   const onSubmit: SubmitHandler<DraftFields> = async data => {
     await saveDraft({
       ...draft,

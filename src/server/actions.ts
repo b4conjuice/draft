@@ -1,5 +1,6 @@
 'use server'
 
+import { revalidatePath } from 'next/cache'
 import { auth } from '@clerk/nextjs/server'
 import { and, desc, eq } from 'drizzle-orm'
 
@@ -142,4 +143,5 @@ export async function saveDraft(draft: DraftNote) {
     body,
   }
   await saveNote(updatedNote)
+  revalidatePath(`/drafts/${id}`)
 }
