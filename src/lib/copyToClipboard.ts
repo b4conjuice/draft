@@ -1,9 +1,9 @@
-export default function copyToClipboard (textToCopy: string) {
+export default function copyToClipboard(textToCopy: string) {
   let textArea: HTMLTextAreaElement
 
   function isOS() {
     // can use a better detection logic here
-    return navigator.userAgent.match(/ipad|iphone/i)
+    return /ipad|iphone/i.exec(navigator.userAgent)
   }
 
   function createTextArea(text: string) {
