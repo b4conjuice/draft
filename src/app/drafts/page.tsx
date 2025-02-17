@@ -1,13 +1,20 @@
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
-import { PencilSquareIcon } from '@heroicons/react/20/solid'
 import { revalidatePath } from 'next/cache'
+import { PencilSquareIcon } from '@heroicons/react/20/solid'
+import { auth } from '@clerk/nextjs/server'
 
 import { Main } from '@/components/ui'
 import TopNav from '../_components/topNav'
 import { getNotes, saveRelatedDraft } from '@/server/actions'
 
 export default async function DraftListPage() {
+  const user = await auth()
+
+  if (!user.userId) {
+    redirect('/')
+  }
+
   const notes = await getNotes()
   return (
     <>
