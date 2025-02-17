@@ -9,6 +9,7 @@ import {
   ChartBarIcon,
   ChevronLeftIcon,
   Cog6ToothIcon,
+  ListBulletIcon,
   PencilSquareIcon,
   XMarkIcon,
 } from '@heroicons/react/20/solid'
@@ -17,22 +18,24 @@ import { Main } from '@/components/ui'
 import { saveDraft } from '@/server/actions'
 import { type DraftNote, type DraftFields } from '@/lib/types'
 import Results from './results'
+import List from './list'
 
 export default function DraftForm(draft: DraftNote) {
-  const { title, teams, items } = draft
   const [showItems, setShowItems] = useState(true)
   const [showResults, setShowResults] = useState(false)
+  const [showList, setShowList] = useState(false)
   const {
     register,
     handleSubmit,
     formState: { isDirty, isSubmitSuccessful },
     reset,
     getValues,
+    setValue,
   } = useForm<DraftFields>({
     defaultValues: {
-      title,
-      teams: teams.join('\n'),
-      items: items.join('\n'),
+      title: draft.title,
+      teams: draft.teams.join('\n'),
+      items: draft.items.join('\n'),
     },
   })
   useEffect(() => {
@@ -48,11 +51,24 @@ export default function DraftForm(draft: DraftNote) {
       items: data.items.split('\n'),
     })
   }
+  const { title, items: itemsAsString, teams: teamsAsString } = getValues()
+  const items = itemsAsString.split('\n')
+  const teams = teamsAsString.split('\n')
   return (
     <form className='flex flex-grow flex-col' onSubmit={handleSubmit(onSubmit)}>
       <Main className='flex flex-col'>
         {showResults ? (
           <Results items={items} teams={teams} />
+        ) : showList ? (
+          <>
+            <h2 className='px-2'>{title}</h2>
+            <List
+              items={items}
+              setItems={(newItems: string) => {
+                setValue('items', newItems, { shouldDirty: true })
+              }}
+            />
+          </>
         ) : (
           <>
             <div
@@ -112,6 +128,19 @@ export default function DraftForm(draft: DraftNote) {
               <XMarkIcon className='h-6 w-6' />
             ) : (
               <ChartBarIcon className='h-6 w-6' />
+            )}
+          </button>
+          <button
+            className='text-cb-yellow hover:text-cb-yellow/75 disabled:pointer-events-none disabled:opacity-25'
+            type='button'
+            onClick={() => {
+              setShowList(!showList)
+            }}
+          >
+            {showList ? (
+              <XMarkIcon className='h-6 w-6' />
+            ) : (
+              <ListBulletIcon className='h-6 w-6' />
             )}
           </button>
           <button
