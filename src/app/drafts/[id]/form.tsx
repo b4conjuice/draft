@@ -12,6 +12,7 @@ import {
   Cog6ToothIcon,
   ListBulletIcon,
   PencilSquareIcon,
+  ShareIcon,
   TrashIcon,
 } from '@heroicons/react/20/solid'
 
@@ -22,8 +23,9 @@ import Results from './results'
 import List from './list'
 import Button from '@/components/ui/button'
 import Modal from '@/components/ui/modal'
+import copyToClipboard from '@/lib/copyToClipboard'
 
-const TABS = ['default', 'settings', 'list', 'results'] as const
+const TABS = ['default', 'settings', 'list', 'results', 'share'] as const
 
 type Tab = (typeof TABS)[number]
 
@@ -70,10 +72,24 @@ export default function DraftForm(draft: DraftNote) {
   const { title, items: itemsAsString, teams: teamsAsString } = getValues()
   const items = itemsAsString.split('\n')
   const teams = teamsAsString.split('\n')
+
+  const url = `${window.location.origin}${window.location.pathname}`
   return (
     <form className='flex flex-grow flex-col' onSubmit={handleSubmit(onSubmit)}>
       <Main className='flex flex-col'>
-        {tab === 'results' ? (
+        {tab === 'share' ? (
+          <>
+            <h2 className='px-2'>{title} 123</h2>
+            <button
+              className='w-full border-cobalt bg-cobalt px-2 py-3 text-left hover:cursor-pointer'
+              onClick={() => {
+                copyToClipboard(url)
+              }}
+            >
+              {url}
+            </button>
+          </>
+        ) : tab === 'results' ? (
           <Results items={items} teams={teams} />
         ) : tab === 'list' ? (
           <>
@@ -131,6 +147,16 @@ export default function DraftForm(draft: DraftNote) {
           </Link>
         </div>
         <div className='flex space-x-4'>
+          <button
+            className='text-cb-yellow hover:text-cb-yellow/75 disabled:pointer-events-none disabled:text-cb-light-blue'
+            type='button'
+            onClick={() => {
+              setTab('share')
+            }}
+            disabled={tab === 'share'}
+          >
+            <ShareIcon className='h-6 w-6' />
+          </button>
           <button
             className='text-cb-yellow hover:text-cb-yellow/75 disabled:pointer-events-none disabled:text-cb-light-blue'
             type='button'
