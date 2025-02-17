@@ -11,7 +11,7 @@ import { getNotes, saveRelatedDraft } from '@/server/actions'
 export default async function DraftListPage({
   searchParams,
 }: {
-  searchParams: Promise<{ [key: string]: string | string[] | undefined }>
+  searchParams: Promise<Record<string, string | string[] | undefined>>
 }) {
   const user = await auth()
 
