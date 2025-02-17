@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { type SubmitHandler, useForm } from 'react-hook-form'
 import classNames from 'classnames'
 import {
@@ -29,7 +29,16 @@ type Tab = (typeof TABS)[number]
 
 export default function DraftForm(draft: DraftNote) {
   const router = useRouter()
-  const [tab, setTab] = useState<Tab>('default')
+  const searchParams = useSearchParams()
+  const initialTab = searchParams.get('tab') as Tab
+  const [tab, setTab] = useState<Tab | null>(initialTab ?? 'default')
+  useEffect(() => {
+    if (tab !== 'default') {
+      router.push(`/drafts/${draft.id}?tab=${tab}`)
+    } else {
+      router.push(`/drafts/${draft.id}`)
+    }
+  }, [tab])
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false)
   const {
     register,
