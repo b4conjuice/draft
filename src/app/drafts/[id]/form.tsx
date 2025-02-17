@@ -13,7 +13,6 @@ import {
   ListBulletIcon,
   PencilSquareIcon,
   TrashIcon,
-  XMarkIcon,
 } from '@heroicons/react/20/solid'
 
 import { Main } from '@/components/ui'
@@ -24,11 +23,13 @@ import List from './list'
 import Button from '@/components/ui/button'
 import Modal from '@/components/ui/modal'
 
+const TABS = ['default', 'settings', 'list', 'results'] as const
+
+type Tab = (typeof TABS)[number]
+
 export default function DraftForm(draft: DraftNote) {
   const router = useRouter()
-  const [showItems, setShowItems] = useState(true)
-  const [showResults, setShowResults] = useState(false)
-  const [showList, setShowList] = useState(false)
+  const [tab, setTab] = useState<Tab>('default')
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false)
   const {
     register,
@@ -63,9 +64,9 @@ export default function DraftForm(draft: DraftNote) {
   return (
     <form className='flex flex-grow flex-col' onSubmit={handleSubmit(onSubmit)}>
       <Main className='flex flex-col'>
-        {showResults ? (
+        {tab === 'results' ? (
           <Results items={items} teams={teams} />
-        ) : showList ? (
+        ) : tab === 'list' ? (
           <>
             <h2 className='px-2'>{title}</h2>
             <List
@@ -75,27 +76,18 @@ export default function DraftForm(draft: DraftNote) {
               }}
             />
           </>
-        ) : showItems ? (
-          <div className={classNames('flex flex-grow flex-col')}>
-            <h2 className='px-2'>{title}</h2>
-            <textarea
-              className='w-full flex-grow border-cobalt bg-cobalt caret-cb-yellow focus:border-cb-mint focus:ring-0'
-              placeholder='items'
-              {...register('items', { required: true })}
-            />
-          </div>
-        ) : (
+        ) : tab === 'settings' ? (
           <div className={classNames('flex flex-grow flex-col')}>
             <label className='px-2'>title</label>
             <input
               type='text'
-              className='w-full border-cobalt bg-cobalt focus:border-cb-mint focus:ring-0'
+              className='w-full border-cobalt bg-cobalt focus:border-cb-light-blue focus:ring-0'
               placeholder='title'
               {...register('title', { required: true })}
             />
             <label className='px-2'>teams</label>
             <textarea
-              className='w-full flex-grow border-cobalt bg-cobalt caret-cb-yellow focus:border-cb-mint focus:ring-0'
+              className='w-full flex-grow border-cobalt bg-cobalt caret-cb-yellow focus:border-cb-light-blue focus:ring-0'
               placeholder='teams'
               {...register('teams')}
             />
@@ -108,6 +100,15 @@ export default function DraftForm(draft: DraftNote) {
             >
               <TrashIcon className='h-6 w-6' />
             </Button>
+          </div>
+        ) : (
+          <div className={classNames('flex flex-grow flex-col')}>
+            <h2 className='px-2'>{title}</h2>
+            <textarea
+              className='w-full flex-grow border-cobalt bg-cobalt caret-cb-yellow focus:border-cb-light-blue focus:ring-0'
+              placeholder='items'
+              {...register('items', { required: true })}
+            />
           </div>
         )}
       </Main>
@@ -122,43 +123,44 @@ export default function DraftForm(draft: DraftNote) {
         </div>
         <div className='flex space-x-4'>
           <button
-            className='text-cb-yellow hover:text-cb-yellow/75 disabled:pointer-events-none disabled:opacity-25'
+            className='text-cb-yellow hover:text-cb-yellow/75 disabled:pointer-events-none disabled:text-cb-light-blue'
             type='button'
             onClick={() => {
-              setShowResults(!showResults)
+              setTab('results')
             }}
+            disabled={tab === 'results'}
           >
-            {showResults ? (
-              <XMarkIcon className='h-6 w-6' />
-            ) : (
-              <ChartBarIcon className='h-6 w-6' />
-            )}
+            <ChartBarIcon className='h-6 w-6' />
           </button>
           <button
-            className='text-cb-yellow hover:text-cb-yellow/75 disabled:pointer-events-none disabled:opacity-25'
+            className='text-cb-yellow hover:text-cb-yellow/75 disabled:pointer-events-none disabled:text-cb-light-blue'
             type='button'
             onClick={() => {
-              setShowList(!showList)
+              setTab('list')
             }}
+            disabled={tab === 'list'}
           >
-            {showList ? (
-              <XMarkIcon className='h-6 w-6' />
-            ) : (
-              <ListBulletIcon className='h-6 w-6' />
-            )}
+            <ListBulletIcon className='h-6 w-6' />
           </button>
           <button
-            className='text-cb-yellow hover:text-cb-yellow/75 disabled:pointer-events-none disabled:opacity-25'
+            className='text-cb-yellow hover:text-cb-yellow/75 disabled:pointer-events-none disabled:text-cb-light-blue'
             type='button'
             onClick={() => {
-              setShowItems(!showItems)
+              setTab('settings')
             }}
+            disabled={tab === 'settings'}
           >
-            {showItems ? (
-              <Cog6ToothIcon className='h-6 w-6' />
-            ) : (
-              <PencilSquareIcon className='h-6 w-6' />
-            )}
+            <Cog6ToothIcon className='h-6 w-6' />
+          </button>
+          <button
+            className='text-cb-yellow hover:text-cb-yellow/75 disabled:pointer-events-none disabled:text-cb-light-blue'
+            type='button'
+            onClick={() => {
+              setTab('default')
+            }}
+            disabled={tab === 'default'}
+          >
+            <PencilSquareIcon className='h-6 w-6' />
           </button>
           <button
             className='flex w-full justify-center text-cb-yellow hover:text-cb-yellow/75 disabled:pointer-events-none disabled:opacity-25'
