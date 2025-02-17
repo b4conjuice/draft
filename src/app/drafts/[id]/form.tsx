@@ -64,7 +64,7 @@ export default function DraftForm(draft: DraftNote) {
               <h2 className='px-2'>{title}</h2>
               <textarea
                 className='w-full flex-grow border-cobalt bg-cobalt caret-cb-yellow focus:border-cb-mint focus:ring-0'
-                placeholder='title'
+                placeholder='items'
                 {...register('items', { required: true })}
               />
             </div>
