@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { type SubmitHandler, useForm } from 'react-hook-form'
 import classNames from 'classnames'
 import {
@@ -11,19 +12,24 @@ import {
   Cog6ToothIcon,
   ListBulletIcon,
   PencilSquareIcon,
+  TrashIcon,
   XMarkIcon,
 } from '@heroicons/react/20/solid'
 
 import { Main } from '@/components/ui'
-import { saveDraft } from '@/server/actions'
+import { deleteDraft, saveDraft } from '@/server/actions'
 import { type DraftNote, type DraftFields } from '@/lib/types'
 import Results from './results'
 import List from './list'
+import Button from '@/components/ui/button'
+import Modal from '@/components/ui/modal'
 
 export default function DraftForm(draft: DraftNote) {
+  const router = useRouter()
   const [showItems, setShowItems] = useState(true)
   const [showResults, setShowResults] = useState(false)
   const [showList, setShowList] = useState(false)
+  const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false)
   const {
     register,
     handleSubmit,
@@ -93,6 +99,15 @@ export default function DraftForm(draft: DraftNote) {
               placeholder='teams'
               {...register('teams')}
             />
+            <Button
+              backgroundColorClassName='bg-red-700'
+              displayClassName='flex justify-center'
+              onClick={() => {
+                setIsConfirmModalOpen(true)
+              }}
+            >
+              <TrashIcon className='h-6 w-6' />
+            </Button>
           </div>
         )}
       </Main>
@@ -154,6 +169,30 @@ export default function DraftForm(draft: DraftNote) {
           </button>
         </div>
       </footer>
+      <Modal
+        isOpen={isConfirmModalOpen}
+        setIsOpen={setIsConfirmModalOpen}
+        title='are you sure you want to delete?'
+      >
+        <div className='flex space-x-4'>
+          <Button
+            onClick={async () => {
+              await deleteDraft(draft.id, '/drafts')
+              setIsConfirmModalOpen(false)
+              router.push('/drafts')
+            }}
+          >
+            yes
+          </Button>
+          <Button
+            onClick={() => {
+              setIsConfirmModalOpen(false)
+            }}
+          >
+            no
+          </Button>
+        </div>
+      </Modal>
     </form>
   )
 }

@@ -145,3 +145,18 @@ export async function saveDraft(draft: DraftNote) {
   await saveNote(updatedNote)
   revalidatePath(`/drafts/${id}`)
 }
+
+export async function deleteDraft(id: number, currentPath = '/') {
+  const user = await auth()
+
+  if (!user.userId) throw new Error('unauthorized')
+
+  await db.delete(drafts).where(and(eq(drafts.noteId, id)))
+
+  await db
+    .delete(notes)
+    .where(and(eq(notes.id, id), eq(notes.author, user.userId)))
+
+  console.log('deleted', id)
+  revalidatePath(currentPath)
+}
