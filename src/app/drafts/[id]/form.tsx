@@ -69,42 +69,31 @@ export default function DraftForm(draft: DraftNote) {
               }}
             />
           </>
+        ) : showItems ? (
+          <div className={classNames('flex flex-grow flex-col')}>
+            <h2 className='px-2'>{title}</h2>
+            <textarea
+              className='w-full flex-grow border-cobalt bg-cobalt caret-cb-yellow focus:border-cb-mint focus:ring-0'
+              placeholder='items'
+              {...register('items', { required: true })}
+            />
+          </div>
         ) : (
-          <>
-            <div
-              className={classNames(
-                'flex flex-grow flex-col',
-                showItems ? '' : 'hidden'
-              )}
-            >
-              <h2 className='px-2'>{title}</h2>
-              <textarea
-                className='w-full flex-grow border-cobalt bg-cobalt caret-cb-yellow focus:border-cb-mint focus:ring-0'
-                placeholder='items'
-                {...register('items', { required: true })}
-              />
-            </div>
-            <div
-              className={classNames(
-                'flex flex-grow flex-col',
-                showItems ? 'hidden' : ''
-              )}
-            >
-              <label className='px-2'>title</label>
-              <input
-                type='text'
-                className='w-full border-cobalt bg-cobalt focus:border-cb-mint focus:ring-0'
-                placeholder='title'
-                {...register('title', { required: true })}
-              />
-              <label className='px-2'>teams</label>
-              <textarea
-                className='w-full flex-grow border-cobalt bg-cobalt caret-cb-yellow focus:border-cb-mint focus:ring-0'
-                placeholder='teams'
-                {...register('teams')}
-              />
-            </div>
-          </>
+          <div className={classNames('flex flex-grow flex-col')}>
+            <label className='px-2'>title</label>
+            <input
+              type='text'
+              className='w-full border-cobalt bg-cobalt focus:border-cb-mint focus:ring-0'
+              placeholder='title'
+              {...register('title', { required: true })}
+            />
+            <label className='px-2'>teams</label>
+            <textarea
+              className='w-full flex-grow border-cobalt bg-cobalt caret-cb-yellow focus:border-cb-mint focus:ring-0'
+              placeholder='teams'
+              {...register('teams')}
+            />
+          </div>
         )}
       </Main>
       <footer className='sticky bottom-0 flex items-center justify-between bg-cb-dark-blue px-2 pb-4 pt-2'>
