@@ -9,7 +9,7 @@ import {
   ChartBarIcon,
   ChevronLeftIcon,
   Cog6ToothIcon,
-  ListBulletIcon,
+  PencilSquareIcon,
   XMarkIcon,
 } from '@heroicons/react/20/solid'
 
@@ -124,7 +124,7 @@ export default function DraftForm(draft: DraftNote) {
             {showItems ? (
               <Cog6ToothIcon className='h-6 w-6' />
             ) : (
-              <ListBulletIcon className='h-6 w-6' />
+              <PencilSquareIcon className='h-6 w-6' />
             )}
           </button>
           <button
