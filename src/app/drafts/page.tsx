@@ -31,10 +31,10 @@ export default async function DraftListPage({
         <div className='flex flex-grow flex-col space-y-4'>
           <ul className='divide-y divide-cb-dusty-blue'>
             {notes.map(note => (
-              <li key={note.id} className='flex py-4 first:pt-0 last:pb-0'>
+              <li key={note.id} className='group flex'>
                 {note.hasDraft ? (
                   <Link
-                    className='text-cb-pink hover:text-cb-pink/75'
+                    className='w-full py-4 text-cb-pink hover:text-cb-pink/75 group-first:pt-0'
                     href={`/drafts/${note.id}`}
                   >
                     <div>
@@ -45,38 +45,38 @@ export default async function DraftListPage({
                     </div>
                   </Link>
                 ) : (
-                  <span className='flex grow items-center justify-between'>
-                    <div>
-                      <div>{note.title}</div>
-                      {note.tags && note.tags.length > 0 && (
-                        <div>{note.tags.join(' ')}</div>
-                      )}
-                    </div>
-                  </span>
-                )}
-                <div className='flex items-center space-x-2'>
-                  {note.hasDraft ? null : (
-                    <form
-                      action={async () => {
-                        'use server'
-                        const newDraft = {
-                          noteId: note.id,
-                        }
-                        await saveRelatedDraft(newDraft)
-                        revalidatePath('/drafts')
-                        redirect(`/drafts/${note.id}`)
-                      }}
-                    >
-                      <button
-                        type='submit'
-                        tabIndex={-1}
-                        className='text-cb-yellow hover:text-cb-yellow/75'
+                  <div className='flex w-full py-4 group-first:pt-0'>
+                    <span className='flex grow items-center justify-between'>
+                      <div>
+                        <div>{note.title}</div>
+                        {note.tags && note.tags.length > 0 && (
+                          <div>{note.tags.join(' ')}</div>
+                        )}
+                      </div>
+                    </span>
+                    <div className='flex items-center space-x-2'>
+                      <form
+                        action={async () => {
+                          'use server'
+                          const newDraft = {
+                            noteId: note.id,
+                          }
+                          await saveRelatedDraft(newDraft)
+                          revalidatePath('/drafts')
+                          redirect(`/drafts/${note.id}`)
+                        }}
                       >
-                        <PencilSquareIcon className='h-6 w-6' />
-                      </button>
-                    </form>
-                  )}
-                </div>
+                        <button
+                          type='submit'
+                          tabIndex={-1}
+                          className='text-cb-yellow hover:text-cb-yellow/75'
+                        >
+                          <PencilSquareIcon className='h-6 w-6' />
+                        </button>
+                      </form>
+                    </div>
+                  </div>
+                )}
               </li>
             ))}
           </ul>
