@@ -9,13 +9,8 @@ import { type DraftNote, type Note } from '@/lib/types'
 import { drafts, notes } from './db/schema'
 
 export async function getNote(noteId: number) {
-  const user = await auth()
-
-  if (!user.userId) throw new Error('unauthorized')
-
   const note = await db.query.notes.findFirst({
-    where: (model, { eq }) =>
-      and(eq(model.id, noteId), eq(model.author, user.userId)),
+    where: (model, { eq }) => and(eq(model.id, noteId)),
   })
 
   return note
@@ -99,10 +94,6 @@ export async function saveRelatedDraft({
 }
 
 export async function getDraft(noteId: number) {
-  const user = await auth()
-
-  if (!user.userId) throw new Error('unauthorized')
-
   const note = await getNote(noteId)
 
   if (!note) throw new Error('note does not exist')

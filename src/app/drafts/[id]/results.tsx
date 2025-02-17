@@ -1,3 +1,5 @@
+'use client'
+
 import copyToClipboard from '@/lib/copyToClipboard'
 import { DocumentDuplicateIcon } from '@heroicons/react/20/solid'
 
