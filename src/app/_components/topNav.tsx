@@ -2,14 +2,13 @@ import { ArrowRightStartOnRectangleIcon } from '@heroicons/react/20/solid'
 import { SignedIn, SignedOut, SignInButton, UserButton } from '@clerk/nextjs'
 
 import TopNavTitle from './topNavTitle'
-import { DEFAULT_TITLE } from '@/lib/defaults'
 import getUsername from '@/lib/getUsername'
 
 export default async function TopNav({ title }: { title?: string }) {
   const username = await getUsername()
   return (
     <div className='container mx-auto mb-2 flex w-full max-w-screen-md items-center px-2 pt-2 md:px-0'>
-      <TopNavTitle title={title ?? DEFAULT_TITLE} />
+      <TopNavTitle title={title} />
       <div className='flex flex-grow justify-end'>
         <SignedOut>
           <SignInButton>
