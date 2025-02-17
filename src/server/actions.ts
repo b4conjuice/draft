@@ -52,7 +52,7 @@ export async function saveNote(note: Note) {
   if (!newNotes || newNotes.length < 0) throw new Error('something went wrong')
   const newNote = newNotes[0]
   if (!newNote) throw new Error('something went wrong')
-  return newNote.id
+  return newNote
 }
 
 export async function getNotes() {

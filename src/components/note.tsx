@@ -53,7 +53,8 @@ export default function Note() {
                   list: [],
                   tags: [],
                 }
-                const noteId = await saveNote(newNote)
+                const note = await saveNote(newNote)
+                const noteId = note.id
                 const newDraft = {
                   noteId,
                 }
