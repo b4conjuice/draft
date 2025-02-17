@@ -64,7 +64,7 @@ export async function getNotes() {
 
   return results.map(result => ({
     ...result.n4_note,
-    hasPodcast: Boolean(result.draft),
+    hasDraft: Boolean(result.draft),
   }))
 }
 
