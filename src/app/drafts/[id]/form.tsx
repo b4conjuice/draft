@@ -79,7 +79,7 @@ export default function DraftForm(draft: DraftNote) {
       <Main className='flex flex-col'>
         {tab === 'share' ? (
           <>
-            <h2 className='px-2'>{title} 123</h2>
+            <h2 className='px-2'>{title}</h2>
             <button
               className='w-full border-cobalt bg-cobalt px-2 py-3 text-left hover:cursor-pointer'
               onClick={() => {
