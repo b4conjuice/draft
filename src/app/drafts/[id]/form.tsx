@@ -54,6 +54,8 @@ export default function DraftForm(draft: DraftNote) {
       title: draft.title,
       teams: draft.teams.join('\n'),
       items: draft.items.join('\n'),
+      categories: draft.categories.join('\n'),
+      options: draft.options.join('\n'),
     },
   })
   useEffect(() => {
@@ -67,6 +69,8 @@ export default function DraftForm(draft: DraftNote) {
       title: data.title,
       teams: data.teams.split('\n'),
       items: data.items.split('\n'),
+      categories: data.categories.split('\n'),
+      options: data.options.split('\n'),
     })
   }
   const { title, items: itemsAsString, teams: teamsAsString } = getValues()
@@ -115,6 +119,18 @@ export default function DraftForm(draft: DraftNote) {
               className='w-full flex-grow border-cobalt bg-cobalt caret-cb-yellow focus:border-cb-light-blue focus:ring-0'
               placeholder='teams'
               {...register('teams')}
+            />
+            <label className='px-2'>categories</label>
+            <textarea
+              className='w-full flex-grow border-cobalt bg-cobalt caret-cb-yellow focus:border-cb-light-blue focus:ring-0'
+              placeholder='categories'
+              {...register('categories')}
+            />
+            <label className='px-2'>options</label>
+            <textarea
+              className='w-full flex-grow border-cobalt bg-cobalt caret-cb-yellow focus:border-cb-light-blue focus:ring-0'
+              placeholder='options'
+              {...register('options')}
             />
             <Button
               backgroundColorClassName='bg-red-700'

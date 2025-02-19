@@ -2,7 +2,6 @@ import { auth } from '@clerk/nextjs/server'
 import { ArrowRightStartOnRectangleIcon } from '@heroicons/react/20/solid'
 import { SignedIn, SignedOut, SignInButton, UserButton } from '@clerk/nextjs'
 
-import { Main } from '@/components/ui'
 import { getDraft } from '@/server/actions'
 import DraftForm from './form'
 import getUsername from '@/lib/getUsername'

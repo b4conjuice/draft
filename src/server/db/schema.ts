@@ -42,6 +42,14 @@ export const drafts = createTable('draft', {
     .references(() => notes.id)
     .primaryKey(),
   teams: text('teams').array().notNull(),
+  categories: text('categories')
+    .array()
+    .notNull()
+    .default(sql`'{}'::text[]`),
+  options: text('options')
+    .array()
+    .notNull()
+    .default(sql`'{}'::text[]`),
   createdAt: timestamp('created_at', { withTimezone: true })
     .default(sql`CURRENT_TIMESTAMP`)
     .notNull(),

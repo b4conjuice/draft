@@ -71,9 +71,13 @@ export async function getNotes() {
 export async function saveRelatedDraft({
   noteId,
   teams,
+  categories,
+  options,
 }: {
   noteId: number
   teams?: string[]
+  categories?: string[]
+  options?: string[]
 }) {
   const user = await auth()
 
@@ -84,11 +88,15 @@ export async function saveRelatedDraft({
     .values({
       noteId,
       teams: teams ?? [],
+      categories: categories ?? [],
+      options: options ?? [],
     })
     .onConflictDoUpdate({
       target: drafts.noteId,
       set: {
         teams: teams ?? [],
+        categories: categories ?? [],
+        options: options ?? [],
       },
     })
 }
@@ -104,7 +112,7 @@ export async function getDraft(noteId: number) {
 
   if (!relatedDraft) throw new Error('draft does not exist')
 
-  const { teams } = relatedDraft
+  const { teams, categories, options } = relatedDraft
   const { title, body } = note
 
   const draft: DraftNote = {
@@ -112,6 +120,8 @@ export async function getDraft(noteId: number) {
     title,
     items: body.split('\n'),
     teams,
+    categories,
+    options,
   }
 
   return draft
@@ -122,9 +132,9 @@ export async function saveDraft(draft: DraftNote) {
 
   if (!user.userId) throw new Error('unauthorized')
 
-  const { id, title, items, teams } = draft
+  const { id, title, items, teams, categories, options } = draft
 
-  await saveRelatedDraft({ noteId: id, teams })
+  await saveRelatedDraft({ noteId: id, teams, categories, options })
 
   const body = items.join('\n')
   const updatedNote = {
