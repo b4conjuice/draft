@@ -82,7 +82,7 @@ export default async function DraftListPage({
           </ul>
         </div>
       </Main>
-      <footer className='sticky bottom-0 flex items-center justify-between bg-cb-dusty-blue px-2 pb-4 pt-2'>
+      <footer className='sticky bottom-0 flex items-center justify-between bg-cb-dusty-blue px-2 pb-6 pt-2'>
         <div className='flex space-x-4'>
           {showAll ? (
             <Link
