@@ -15,6 +15,7 @@ import {
   ShareIcon,
   TrashIcon,
 } from '@heroicons/react/20/solid'
+import { useCopyToClipboard } from '@uidotdev/usehooks'
 
 import { Main } from '@/components/ui'
 import { deleteDraft, saveDraft } from '@/server/actions'
@@ -23,13 +24,13 @@ import Results from './results'
 import List from './list'
 import Button from '@/components/ui/button'
 import Modal from '@/components/ui/modal'
-import copyToClipboard from '@/lib/copyToClipboard'
 
 const TABS = ['default', 'settings', 'list', 'results', 'share'] as const
 
 type Tab = (typeof TABS)[number]
 
 export default function DraftForm(draft: DraftNote) {
+  const [copiedText, copyToClipboard] = useCopyToClipboard()
   const router = useRouter()
   const searchParams = useSearchParams()
   const initialTab = searchParams.get('tab') as Tab
@@ -86,8 +87,8 @@ export default function DraftForm(draft: DraftNote) {
             <h2 className='px-2'>{title}</h2>
             <button
               className='w-full border-cobalt bg-cobalt px-2 py-3 text-left hover:cursor-pointer'
-              onClick={() => {
-                copyToClipboard(url)
+              onClick={async () => {
+                await copyToClipboard(url)
               }}
             >
               {url}

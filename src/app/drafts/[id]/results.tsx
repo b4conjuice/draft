@@ -1,7 +1,7 @@
 'use client'
 
-import copyToClipboard from '@/lib/copyToClipboard'
 import { DocumentDuplicateIcon } from '@heroicons/react/20/solid'
+import { useCopyToClipboard } from '@uidotdev/usehooks'
 
 export default function Results({
   items,
@@ -10,6 +10,7 @@ export default function Results({
   items: string[]
   teams: string[]
 }) {
+  const [copiedText, copyToClipboard] = useCopyToClipboard()
   const teamsCount = teams.length
   const league = items.reduce<string[][]>((finalItems, item, index) => {
     const round = Math.ceil((index + 1) / teamsCount)
@@ -57,8 +58,8 @@ export default function Results({
           <button
             className='flex w-full justify-center text-cb-yellow hover:text-cb-yellow/75 disabled:pointer-events-none disabled:opacity-25'
             type='submit'
-            onClick={() => {
-              copyToClipboard(
+            onClick={async () => {
+              await copyToClipboard(
                 league
                   .map(
                     (team, index) => `${teams[index] ?? ''}\n${team.join('\n')}`
