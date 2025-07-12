@@ -10,6 +10,7 @@ import {
   ChartBarIcon,
   ChevronLeftIcon,
   Cog6ToothIcon,
+  DocumentDuplicateIcon,
   ListBulletIcon,
   PencilSquareIcon,
   ShareIcon,
@@ -86,12 +87,13 @@ export default function DraftForm(draft: DraftNote) {
           <>
             <h2 className='px-2'>{title}</h2>
             <button
-              className='w-full border-cobalt bg-cobalt px-2 py-3 text-left hover:cursor-pointer'
+              className='group flex w-full border-cobalt bg-cobalt px-2 py-3 text-left hover:cursor-pointer'
               onClick={async () => {
                 await copyToClipboard(url)
               }}
             >
-              {url}
+              <div className='flex-grow'>{url}</div>
+              <DocumentDuplicateIcon className='h-6 w-6 text-cb-yellow group-hover:text-cb-yellow/75' />
             </button>
           </>
         ) : tab === 'results' ? (
