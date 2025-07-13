@@ -274,10 +274,10 @@ export default function DraftForm(draft: DraftNote) {
             },
           },
           {
-            id: 'switch-tab-tools',
-            title: 'switch tab to tools',
+            id: 'switch-tab-results',
+            title: 'switch tab to results',
             action: () => {
-              setTab('tools')
+              setTab('results')
             },
           },
           {
