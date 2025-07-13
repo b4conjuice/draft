@@ -90,9 +90,9 @@ export default function CommandPalette({
             <DialogPanel>
               <Combobox
                 as='div'
-                onChange={(command: Command) => {
+                onChange={async (command: Command) => {
                   if (command?.action) {
-                    command.action()
+                    await command.action()
                     setIsOpen(false)
                   }
                 }}
