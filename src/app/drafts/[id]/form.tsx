@@ -25,6 +25,7 @@ import Results from './results'
 import List from './list'
 import Button from '@/components/ui/button'
 import Modal from '@/components/ui/modal'
+import CommandPalette from '@/components/command-palette'
 
 const TABS = ['default', 'settings', 'list', 'results', 'share'] as const
 
@@ -249,6 +250,52 @@ export default function DraftForm(draft: DraftNote) {
           </Button>
         </div>
       </Modal>
+      <CommandPalette
+        commands={[
+          {
+            id: 'switch-tab-default',
+            title: 'switch tab to default',
+            action: () => {
+              setTab('default')
+            },
+          },
+          {
+            id: 'switch-tab-settings',
+            title: 'switch tab to settings',
+            action: () => {
+              setTab('settings')
+            },
+          },
+          {
+            id: 'switch-tab-list',
+            title: 'switch tab to list',
+            action: () => {
+              setTab('list')
+            },
+          },
+          {
+            id: 'switch-tab-tools',
+            title: 'switch tab to tools',
+            action: () => {
+              setTab('tools')
+            },
+          },
+          {
+            id: 'switch-tab-share',
+            title: 'switch tab to share',
+            action: () => {
+              setTab('share')
+            },
+          },
+          {
+            id: 'go-notes',
+            title: 'go to notes',
+            action: () => {
+              router.push('/notes')
+            },
+          },
+        ]}
+      />
     </form>
   )
 }
