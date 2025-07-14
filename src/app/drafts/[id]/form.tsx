@@ -17,6 +17,7 @@ import {
   TrashIcon,
 } from '@heroicons/react/20/solid'
 import { useCopyToClipboard } from '@uidotdev/usehooks'
+import { toast } from 'react-toastify'
 
 import { Main } from '@/components/ui'
 import { deleteDraft, saveDraft } from '@/server/actions'
@@ -91,6 +92,7 @@ export default function DraftForm(draft: DraftNote) {
               className='group flex w-full border-cobalt bg-cobalt px-2 py-3 text-left hover:cursor-pointer'
               onClick={async () => {
                 await copyToClipboard(url)
+                toast.success('copied to clipboard')
               }}
             >
               <div className='flex-grow'>{url}</div>

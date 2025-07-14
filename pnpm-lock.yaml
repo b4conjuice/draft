@@ -65,6 +65,9 @@ dependencies:
   react-hook-form:
     specifier: ^7.54.2
     version: 7.54.2(react@18.3.1)
+  react-toastify:
+    specifier: ^11.0.5
+    version: 11.0.5(react-dom@18.3.1)(react@18.3.1)
   server-only:
     specifier: ^0.0.1
     version: 0.0.1
@@ -3721,6 +3724,17 @@ packages:
       react: 18.3.1
       redux: 5.0.1
       use-sync-external-store: 1.4.0(react@18.3.1)
+    dev: false
+
+  /react-toastify@11.0.5(react-dom@18.3.1)(react@18.3.1):
+    resolution: {integrity: sha512-EpqHBGvnSTtHYhCPLxML05NLY2ZX0JURbAdNYa6BUkk+amz4wbKBQvoKQAB0ardvSarUBuY4Q4s1sluAzZwkmA==}
+    peerDependencies:
+      react: ^18 || ^19
+      react-dom: ^18 || ^19
+    dependencies:
+      clsx: 2.1.1
+      react: 18.3.1
+      react-dom: 18.3.1(react@18.3.1)
     dev: false
 
   /react@18.3.1:

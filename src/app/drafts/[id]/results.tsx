@@ -2,6 +2,7 @@
 
 import { DocumentDuplicateIcon } from '@heroicons/react/20/solid'
 import { useCopyToClipboard } from '@uidotdev/usehooks'
+import { toast } from 'react-toastify'
 
 export default function Results({
   items,
@@ -37,11 +38,12 @@ export default function Results({
           <button
             className='flex w-full justify-center text-cb-yellow hover:text-cb-yellow/75 disabled:pointer-events-none disabled:opacity-25'
             type='submit'
-            onClick={() =>
-              copyToClipboard(
+            onClick={async () => {
+              await copyToClipboard(
                 items.map((item, index) => `${index + 1} ${item}`).join('\n')
               )
-            }
+              toast.success('copied items to clipboard')
+            }}
           >
             <DocumentDuplicateIcon className='h-6 w-6' />
           </button>
@@ -66,6 +68,7 @@ export default function Results({
                   )
                   .join('\n')
               )
+              toast.success('copied teams to clipboard')
             }}
           >
             <DocumentDuplicateIcon className='h-6 w-6' />

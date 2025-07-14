@@ -1,5 +1,6 @@
 import type { Viewport } from 'next'
 import { ClerkProvider } from '@clerk/nextjs'
+import { ToastContainer } from 'react-toastify'
 
 import { TRPCReactProvider } from '@/trpc/react'
 
@@ -32,6 +33,12 @@ export default function RootLayout({
         <body>
           <TRPCReactProvider>
             <div className='flex min-h-screen flex-col bg-cb-dark-blue text-cb-white'>
+              <ToastContainer
+                autoClose={2000}
+                theme='dark'
+                toastClassName='bg-cb-off-blue text-cb-white rounded-lg'
+                pauseOnFocusLoss={false}
+              />
               {children}
             </div>
           </TRPCReactProvider>
