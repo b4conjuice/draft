@@ -20,7 +20,7 @@ import { type DraftNote, type DraftFields } from '@/lib/types'
 import Settings from './settings'
 import Board from './board'
 import Results from '@/app/drafts/[id]/results'
-import Pass from './pass'
+// import Pass from './pass'
 
 const TABS = ['default', 'settings', 'results', 'pass'] as const
 
@@ -94,13 +94,13 @@ export default function LiveDraft(draft: DraftNote) {
           </div>
         ) : tab === 'pass' ? (
           <div className='flex flex-grow flex-col'>
-            <Pass
+            {/* <Pass
               drafted={items}
               setDrafted={(newItems: string[]) => {
                 setItems(newItems.join('\n'))
               }}
               settings={settings}
-            />
+            /> */}
           </div>
         ) : (
           <div className='flex flex-grow flex-col'>
