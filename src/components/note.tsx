@@ -6,7 +6,7 @@ import {
   ArrowDownOnSquareIcon,
   ChevronLeftIcon,
 } from '@heroicons/react/20/solid'
-import { SignedIn } from '@clerk/nextjs'
+import { SignedIn, SignedOut } from '@clerk/nextjs'
 
 import { Main } from '@/components/ui'
 import useLocalStorage from '@/lib/useLocalStorage'
@@ -21,6 +21,9 @@ export default function Note() {
     <>
       <Main className='flex flex-col'>
         <div className='flex flex-grow flex-col space-y-4'>
+          <SignedOut>
+            <p className='px-2'>sign in to save notes</p>
+          </SignedOut>
           <textarea
             className='h-full w-full flex-grow border-cobalt bg-cobalt caret-cb-yellow focus:border-cb-light-blue focus:ring-0'
             value={text}
