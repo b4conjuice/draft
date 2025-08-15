@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
 import { revalidatePath } from 'next/cache'
-import { PencilSquareIcon } from '@heroicons/react/20/solid'
+import { PencilSquareIcon, TableCellsIcon } from '@heroicons/react/20/solid'
 import { auth } from '@clerk/nextjs/server'
 
 import { Main } from '@/components/ui'
@@ -101,6 +101,12 @@ export default async function DraftListPage({
           )}
         </div>
         <div className='flex space-x-4'>
+          <Link
+            className='text-cb-yellow hover:text-cb-yellow/75 disabled:pointer-events-none disabled:opacity-25'
+            href='/live'
+          >
+            <TableCellsIcon className='h-6 w-6' />
+          </Link>
           <Link
             className='text-cb-yellow hover:text-cb-yellow/75 disabled:pointer-events-none disabled:opacity-25'
             href='/'

@@ -14,6 +14,7 @@ import {
   ListBulletIcon,
   PencilSquareIcon,
   ShareIcon,
+  TableCellsIcon,
   TrashIcon,
 } from '@heroicons/react/20/solid'
 import { useCopyToClipboard } from '@uidotdev/usehooks'
@@ -167,6 +168,12 @@ export default function DraftForm(draft: DraftNote) {
           >
             <ChevronLeftIcon className='h-6 w-6' />
           </Link>
+          <Link
+            className='text-cb-yellow hover:text-cb-yellow/75 disabled:pointer-events-none disabled:opacity-25'
+            href={`/live/${draft.id}`}
+          >
+            <TableCellsIcon className='h-6 w-6' />
+          </Link>
         </div>
         <div className='flex space-x-4'>
           <button
@@ -228,6 +235,7 @@ export default function DraftForm(draft: DraftNote) {
           </button>
         </div>
       </footer>
+      {/* TODO: use confirm-modal */}
       <Modal
         isOpen={isConfirmModalOpen}
         setIsOpen={setIsConfirmModalOpen}

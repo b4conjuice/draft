@@ -1,4 +1,5 @@
 import { noteRouter } from '@/server/api/routers/note'
+import { draftRouter } from '@/server/api/routers/draft'
 import { createCallerFactory, createTRPCRouter } from '@/server/api/trpc'
 
 /**
@@ -8,6 +9,7 @@ import { createCallerFactory, createTRPCRouter } from '@/server/api/trpc'
  */
 export const appRouter = createTRPCRouter({
   note: noteRouter,
+  draft: draftRouter,
 })
 
 // export type definition of API

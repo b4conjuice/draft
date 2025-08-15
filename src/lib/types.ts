@@ -24,3 +24,8 @@ export type DraftFields = {
   categories: string
   options: string
 }
+
+export type Rank = {
+  title: string
+  items: string[]
+}
