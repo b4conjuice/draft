@@ -109,6 +109,7 @@ export default function LiveDraft(draft: DraftNote) {
               setDrafted={(newDraft: string[]) => {
                 const newItems = [...newDraft].reverse().join('\n')
                 setItems(newItems)
+                void handleSubmit(onSubmit)()
               }}
               settings={settings}
             />

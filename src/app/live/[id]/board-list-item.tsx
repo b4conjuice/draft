@@ -2,7 +2,7 @@ import {
   TrashIcon,
   PencilSquareIcon,
   EllipsisVerticalIcon,
-} from '@heroicons/react/24/solid'
+} from '@heroicons/react/20/solid'
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
 
 const DraftListItem = ({

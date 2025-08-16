@@ -9,6 +9,7 @@ import ConfirmModal from '@/components/confirm-modal'
 import EditItemModal from './edit-item-modal'
 import AddRankModal from './add-rank-modal'
 import { type Rank } from '@/lib/types'
+import CommandPalette from '@/components/command-palette'
 
 export default function Board({
   drafted,
@@ -29,6 +30,10 @@ export default function Board({
   const editItem =
     typeof itemIndex === 'number' ? (drafted[itemIndex] ?? '') : ''
 
+  const addToQueue = (item: string) => {
+    const newQueue = [...queue, item]
+    setQueue(newQueue)
+  }
   const unqueue = (item: string) => {
     const newQueue = queue.filter(p => p !== item)
     setQueue(newQueue)
@@ -56,6 +61,37 @@ export default function Board({
   const teamsCount = teams.length
   const projections = { title: 'default', items: options }
   const columns = [projections, ...ranks]
+
+  const available = options.filter(
+    option => !drafted?.some(item => item === option)
+  )
+  const commands = [
+    ...available.map(option => {
+      return {
+        id: `draft-${option}`,
+        title: `Draft ${option}`,
+        name: option,
+        action: () => {
+          draft(option)
+        },
+      }
+    }),
+    ...available.map(option => {
+      return {
+        id: `queue-${option}`,
+        title: `Queue ${option}`,
+        name: option,
+        action: () => {
+          addToQueue(option)
+        },
+      }
+    }),
+    // {
+    //   id: `Toggle Hide Drafted`,
+    //   title: `${hideDrafted ? 'Show' : 'Hide'} Drafted`,
+    //   action: () => setHideDrafted(!hideDrafted),
+    // },
+  ]
   return (
     <>
       <div className='flex divide-x divide-cb-dusty-blue overflow-x-auto'>
@@ -94,7 +130,7 @@ export default function Board({
               setItems={(newItems: Array<{ item: string }>) => {
                 setQueue(newItems.map(({ item }) => item))
               }}
-              itemContainerClassName='flex items-center space-x-4 p-2 odd:bg-cb-blue'
+              itemContainerClassName='flex items-center space-x-4 p-2 odd:bg-cb-blue text-cb-orange'
             />
           )}
           <h2 className='flex justify-between space-x-4 border-t-4 border-cb-dusty-blue p-2'>
@@ -211,9 +247,11 @@ export default function Board({
                     <td
                       className={classNames(
                         'p-2',
-                        drafted?.some(p => p === rank.items[index])
+                        drafted.some(p => p === rank.items[index])
                           ? 'opacity-25'
-                          : ''
+                          : queue.some(p => p === rank.items[index])
+                            ? 'text-cb-orange'
+                            : ''
                       )}
                     >
                       <button
@@ -287,6 +325,7 @@ export default function Board({
           setRanks([...ranks, newRank])
         }}
       />
+      <CommandPalette commands={commands} />
     </>
   )
 }
