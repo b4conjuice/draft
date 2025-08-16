@@ -5,6 +5,7 @@ import Link from 'next/link'
 import {
   ArrowDownOnSquareIcon,
   ChevronLeftIcon,
+  TableCellsIcon,
 } from '@heroicons/react/20/solid'
 import { SignedIn, SignedOut } from '@clerk/nextjs'
 
@@ -44,6 +45,12 @@ export default function Note() {
             </Link>
           </div>
           <div className='flex space-x-4'>
+            <Link
+              className='text-cb-yellow hover:text-cb-yellow/75 disabled:pointer-events-none disabled:opacity-25'
+              href='/live'
+            >
+              <TableCellsIcon className='h-6 w-6' />
+            </Link>
             <button
               className='flex w-full justify-center text-cb-yellow hover:text-cb-yellow disabled:pointer-events-none disabled:opacity-25'
               type='button'
