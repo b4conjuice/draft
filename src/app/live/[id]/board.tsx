@@ -1,7 +1,12 @@
 import { useState } from 'react'
-import { PlusCircleIcon, TrashIcon } from '@heroicons/react/20/solid'
+import {
+  Cog6ToothIcon,
+  PlusCircleIcon,
+  TrashIcon,
+} from '@heroicons/react/20/solid'
 import classNames from 'classnames'
 import { useLocalStorage } from '@uidotdev/usehooks'
+import { Switch } from '@headlessui/react'
 
 import DragDropList from '@/components/dragDropList'
 import DraftListItem from './board-list-item'
@@ -10,6 +15,7 @@ import EditItemModal from './edit-item-modal'
 import AddRankModal from './add-rank-modal'
 import { type Rank } from '@/lib/types'
 import CommandPalette from '@/components/command-palette'
+import Modal from '@/components/ui/modal'
 
 const NORMALIZE_ITEM_MAP: Record<string, string> = {
   'Nikola Jokić': 'Nikola Jokic',
@@ -30,10 +36,15 @@ export default function Board({
 }) {
   const [queue, setQueue] = useLocalStorage<string[]>('s4-live-draft-queue', [])
   const [ranks, setRanks] = useLocalStorage<Rank[]>('s4-live-draft-ranks', [])
+  const [hideDrafted, setHideDrafted] = useLocalStorage<boolean>(
+    's4-live-draft-hide-drafted',
+    false
+  )
   const [isEmptyDraftedModalOpen, setIsEmptyDraftedModalOpen] = useState(false)
   const [isEmptyQueueModalOpen, setIsEmptyQueueModalOpen] = useState(false)
   const [isEditItemModalOpen, setIsEditItemModalOpen] = useState(false)
   const [isAddRankModalOpen, setIsAddRankModalOpen] = useState(false)
+  const [isSettingsModalOpen, setIsSettingsModalOpen] = useState(false)
   const [itemIndex, setItemIndex] = useState<number | null>(null)
   const editItem =
     typeof itemIndex === 'number' ? (drafted[itemIndex] ?? '') : ''
@@ -94,11 +105,11 @@ export default function Board({
         },
       }
     }),
-    // {
-    //   id: `Toggle Hide Drafted`,
-    //   title: `${hideDrafted ? 'Show' : 'Hide'} Drafted`,
-    //   action: () => setHideDrafted(!hideDrafted),
-    // },
+    {
+      id: `Toggle Hide Drafted`,
+      title: `${hideDrafted ? 'Show' : 'Hide'} Drafted`,
+      action: () => setHideDrafted(!hideDrafted),
+    },
   ]
   return (
     <>
@@ -144,6 +155,15 @@ export default function Board({
           <h2 className='flex justify-between space-x-4 border-t-4 border-cb-dusty-blue p-2'>
             <span>draft</span>
             <div className='flex space-x-2'>
+              <button
+                className='text-cb-yellow hover:text-cb-yellow/75 disabled:pointer-events-none disabled:text-cb-light-blue'
+                type='button'
+                onClick={() => {
+                  setIsSettingsModalOpen(true)
+                }}
+              >
+                <Cog6ToothIcon className='h-6 w-6' />
+              </button>
               <button
                 type='button'
                 onClick={() => {
@@ -252,6 +272,12 @@ export default function Board({
                       const normalizedItemName = isRank
                         ? normalizeItem(originalItem)
                         : originalItem
+                      const isDrafted = drafted.some(
+                        p => p === normalizedItemName
+                      )
+                      if (hideDrafted && isDrafted) {
+                        return null
+                      }
                       return (
                         <tr
                           key={item}
@@ -274,7 +300,7 @@ export default function Board({
                           <td
                             className={classNames(
                               'truncate p-2',
-                              drafted.some(p => p === normalizedItemName)
+                              isDrafted
                                 ? 'opacity-25'
                                 : queue.some(p => p === normalizedItemName)
                                   ? 'text-cb-orange'
@@ -356,6 +382,24 @@ export default function Board({
         }}
       />
       <CommandPalette commands={commands} />
+      <Modal
+        isOpen={isSettingsModalOpen}
+        setIsOpen={setIsSettingsModalOpen}
+        title='settings'
+      >
+        <div className={classNames('flex gap-2', !hideDrafted && 'opacity-40')}>
+          <span>hide drafted</span>
+          <Switch
+            checked={!hideDrafted}
+            onChange={() => {
+              setHideDrafted(!hideDrafted)
+            }}
+            className='group inline-flex h-6 w-11 items-center rounded-full bg-cb-blue transition'
+          >
+            <span className='size-4 translate-x-1 rounded-full bg-cb-yellow transition group-data-[checked]:translate-x-6' />
+          </Switch>
+        </div>
+      </Modal>
     </>
   )
 }
