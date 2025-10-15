@@ -25,6 +25,68 @@ const NORMALIZE_ITEM_MAP: Record<string, string> = {
 
 const normalizeItem = (item: string) => NORMALIZE_ITEM_MAP[item] ?? item
 
+function PlusMinus({
+  index,
+  rank,
+  compare,
+  isProjections,
+}: {
+  index: number
+  rank: string[]
+  compare: string[]
+  isProjections?: boolean
+}) {
+  const compareIndex = compare.findIndex(p => p === rank[index])
+  const difference = isProjections ? index - compareIndex : compareIndex - index
+  const absoluteDifference = Math.abs(difference)
+  if (isProjections) {
+    return (
+      <td
+        className={`p-2 text-center ${
+          index > compareIndex
+            ? 'bg-green-700'
+            : index < compareIndex || index === -1
+              ? 'bg-red-700'
+              : ''
+        } ${
+          absoluteDifference > 24
+            ? 'bg-opacity-100'
+            : absoluteDifference > 12
+              ? 'bg-opacity-75'
+              : absoluteDifference > 6
+                ? 'bg-opacity-50'
+                : 'bg-opacity-25'
+        }`}
+      >
+        <div>{`${index > compareIndex ? '+' : ''}${difference}`}</div>
+        <div>({compareIndex + 1})</div>
+      </td>
+    )
+  }
+  return (
+    <td
+      className={`p-2 text-center ${
+        compareIndex > index
+          ? 'bg-green-700'
+          : compareIndex < index
+            ? 'bg-red-700'
+            : ''
+      } ${
+        absoluteDifference > 24
+          ? 'bg-opacity-100'
+          : absoluteDifference > 12
+            ? 'bg-opacity-75'
+            : absoluteDifference > 6
+              ? 'bg-opacity-50'
+              : 'bg-opacity-25'
+      }`}
+    >
+      <div>{`${compareIndex > index ? '+' : ''}${difference}`}</div>
+      <div>({compareIndex + 1})</div>
+    </td>
+  )
+}
+
 export default function Board({
   drafted,
   setDrafted,
@@ -263,7 +325,7 @@ export default function Board({
                           </button>
                         )}
                       </td>
-                      {/* <td className='p-2 text-center'>+/-</td> */}
+                      <td className='p-2 text-center'>+/-</td>
                     </tr>
                   </thead>
                   <tbody>
@@ -336,6 +398,20 @@ export default function Board({
                               {normalizedItemName}
                             </button>
                           </td>
+                          {isProjection ? (
+                            <PlusMinus
+                              index={index}
+                              rank={projections.items}
+                              compare={ranks[0] ? ranks[0].items : []}
+                              isProjections
+                            />
+                          ) : (
+                            <PlusMinus
+                              index={index}
+                              rank={rank.items}
+                              compare={projections.items}
+                            />
+                          )}
                         </tr>
                       )
                     })}
