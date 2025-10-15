@@ -11,6 +11,14 @@ import AddRankModal from './add-rank-modal'
 import { type Rank } from '@/lib/types'
 import CommandPalette from '@/components/command-palette'
 
+const NORMALIZE_ITEM_MAP: Record<string, string> = {
+  'Nikola Jokić': 'Nikola Jokic',
+  'Luka Dončić': 'Luka Doncic',
+  'Kristaps Porziņģis': 'Kristaps Porzingis',
+}
+
+const normalizeItem = (item: string) => NORMALIZE_ITEM_MAP[item] ?? item
+
 export default function Board({
   drafted,
   setDrafted,
@@ -94,14 +102,14 @@ export default function Board({
   ]
   return (
     <>
-      <div className='flex divide-x divide-cb-dusty-blue overflow-x-auto'>
-        <div className='sticky left-0 w-[350px] bg-cb-dark-blue'>
+      <div className='flex flex-col divide-x divide-cb-dusty-blue overflow-x-auto md:flex-row'>
+        <div className='h-[50vh] overflow-y-auto bg-cb-dark-blue md:sticky md:left-0 md:h-auto md:w-[350px]'>
           <h2 className='flex justify-between space-x-4 p-2'>
             <span>queue</span>
             <button
               type='button'
               onClick={() => {
-                // setIsEmptyQueueModalOpen(true)
+                setIsEmptyQueueModalOpen(true)
               }}
               disabled={queue?.length === 0}
               className='disabled:pointer-events-none disabled:opacity-25'
@@ -180,115 +188,137 @@ export default function Board({
             itemContainerClassName='flex items-center space-x-4 p-2 odd:bg-cb-blue'
           />
         </div>
-        {columns.map((rank, rankIndex) => (
-          <div key={rank.title} className='w-[350px]'>
-            <table className='w-full'>
-              <thead>
-                <tr>
-                  <td className='p-2 text-center'>#</td>
-                  <td className='flex items-center justify-between p-2'>
-                    {rankIndex > 1 ? (
-                      <button
-                        type='button'
-                        className='block w-full rounded bg-cb-yellow px-2 text-cb-dark-blue'
-                        onClick={() => {
-                          compareRank(rank)
-                        }}
-                      >
-                        {rank.title}
-                      </button>
-                    ) : (
-                      rank.title
-                    )}
-                    {rankIndex === 0 ? (
-                      <button
-                        type='button'
-                        onClick={() => {
-                          setIsAddRankModalOpen(true)
-                        }}
-                      >
-                        <PlusCircleIcon className='h-6 w-6 text-cb-yellow' />
-                      </button>
-                    ) : (
-                      <button
-                        type='button'
-                        onClick={() => {
-                          const newRanks = [...ranks]
-                          newRanks.splice(rankIndex - 1, 1)
-                          console.log(newRanks)
-                          setRanks(newRanks)
-                        }}
-                      >
-                        <TrashIcon className='h-6 w-6 text-red-700' />
-                      </button>
-                    )}
-                  </td>
-                  {/* <td className='p-2 text-center'>+/-</td> */}
-                </tr>
-              </thead>
-              <tbody>
-                {projections.items.map((item, index) => (
-                  <tr
-                    key={item}
-                    // className={classNames(
-                    //   `border-b border-cb-dusty-blue`,
-                    //   (drafted?.some(p => p === rank.items[index]?.name) &&
-                    //     hideDrafted) ||
-                    //     (filter &&
-                    //       !rank.items[index]?.name
-                    //         .toLowerCase()
-                    //         .includes(filter.toLowerCase()))
-                    //     ? 'hidden'
-                    //     : ''
-                    // )}
-                    className={classNames(`border-b border-cb-dusty-blue`)}
-                  >
-                    <td className='p-2 text-center'>{index + 1}</td>
-                    <td
-                      className={classNames(
-                        'p-2',
-                        drafted.some(p => p === rank.items[index])
-                          ? 'opacity-25'
-                          : queue.some(p => p === rank.items[index])
-                            ? 'text-cb-orange'
-                            : ''
-                      )}
-                    >
-                      <button
-                        type='button'
-                        className={classNames(
-                          'truncate hover:text-cb-yellow disabled:pointer-events-none',
-                          projections.items.findIndex(
-                            p => p === rank.items[index]
-                          ) === -1
-                            ? 'font-bold text-red-700'
-                            : ''
+        <div className='flex h-[50vh] divide-x divide-cb-dusty-blue overflow-x-auto overflow-y-auto md:h-auto'>
+          {columns.map((rank, rankIndex) => {
+            const isProjection = rankIndex === 0
+            const isRank = rankIndex > 0
+            const isSelectedRank = rankIndex === 1
+            const isUnselectedRank = rankIndex > 1
+            return (
+              <div
+                key={rank.title}
+                className={classNames(
+                  'w-[50vw] bg-cb-dark-blue md:w-[350px]',
+                  isUnselectedRank && 'hidden md:block'
+                )}
+              >
+                <table className='w-[50vw] md:w-full'>
+                  <thead>
+                    <tr>
+                      <td className='p-2 text-center'>#</td>
+                      <td className='flex items-center justify-between truncate p-2'>
+                        {isUnselectedRank ? (
+                          <button
+                            type='button'
+                            className='block w-full rounded bg-cb-yellow px-2 text-cb-dark-blue'
+                            onClick={() => {
+                              compareRank(rank)
+                            }}
+                          >
+                            {rank.title}
+                          </button>
+                        ) : (
+                          rank.title
                         )}
-                        onClick={() => {
-                          const item = rank.items[index]
-                          if (item) {
-                            if (rank.title === projections.title) {
-                              draft(item)
-                            } else {
-                              setQueue([...queue, item])
-                            }
-                          }
-                        }}
-                        disabled={
-                          drafted?.some(p => p === rank.items[index]) ||
-                          (rank.title !== projections.title &&
-                            queue?.some(p => p === rank.items[index]))
-                        }
-                      >
-                        {rank.items[index]}
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        ))}
+                        {isProjection ? (
+                          <button
+                            type='button'
+                            onClick={() => {
+                              setIsAddRankModalOpen(true)
+                            }}
+                          >
+                            <PlusCircleIcon className='h-6 w-6 text-cb-yellow' />
+                          </button>
+                        ) : (
+                          <button
+                            type='button'
+                            onClick={() => {
+                              const newRanks = [...ranks]
+                              newRanks.splice(rankIndex - 1, 1)
+                              console.log(newRanks)
+                              setRanks(newRanks)
+                            }}
+                          >
+                            <TrashIcon className='h-6 w-6 text-red-700' />
+                          </button>
+                        )}
+                      </td>
+                      {/* <td className='p-2 text-center'>+/-</td> */}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {projections.items.map((item, index) => {
+                      const originalItem = rank.items[index] ?? ''
+                      const normalizedItemName = isRank
+                        ? normalizeItem(originalItem)
+                        : originalItem
+                      return (
+                        <tr
+                          key={item}
+                          // className={classNames(
+                          //   `border-b border-cb-dusty-blue`,
+                          //   (drafted?.some(p => p === rank.items[index]?.name) &&
+                          //     hideDrafted) ||
+                          //     (filter &&
+                          //       !rank.items[index]?.name
+                          //         .toLowerCase()
+                          //         .includes(filter.toLowerCase()))
+                          //     ? 'hidden'
+                          //     : ''
+                          // )}
+                          className={classNames(
+                            `border-b border-cb-dusty-blue`
+                          )}
+                        >
+                          <td className='p-2 text-center'>{index + 1}</td>
+                          <td
+                            className={classNames(
+                              'truncate p-2',
+                              drafted.some(p => p === normalizedItemName)
+                                ? 'opacity-25'
+                                : queue.some(p => p === normalizedItemName)
+                                  ? 'text-cb-orange'
+                                  : ''
+                            )}
+                          >
+                            <button
+                              type='button'
+                              className={classNames(
+                                'truncate hover:text-cb-yellow disabled:pointer-events-none',
+                                projections.items.findIndex(
+                                  p => p === normalizedItemName
+                                ) === -1
+                                  ? 'font-bold text-red-700'
+                                  : ''
+                              )}
+                              onClick={() => {
+                                const item = normalizedItemName
+                                if (item) {
+                                  if (rank.title === projections.title) {
+                                    draft(item)
+                                  } else {
+                                    setQueue([...queue, item])
+                                  }
+                                }
+                              }}
+                              disabled={
+                                drafted?.some(p => p === normalizedItemName) ||
+                                (rank.title !== projections.title &&
+                                  queue?.some(p => p === normalizedItemName))
+                              }
+                            >
+                              {normalizedItemName}
+                            </button>
+                          </td>
+                        </tr>
+                      )
+                    })}
+                  </tbody>
+                </table>
+              </div>
+            )
+          })}
+        </div>
       </div>
       <ConfirmModal
         isOpen={isEmptyDraftedModalOpen}
