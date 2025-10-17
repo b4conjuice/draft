@@ -10,6 +10,7 @@ import {
   ChartBarIcon,
   ChevronLeftIcon,
   Cog6ToothIcon,
+  DocumentArrowDownIcon,
   DocumentDuplicateIcon,
   ListBulletIcon,
   PencilSquareIcon,
@@ -28,6 +29,7 @@ import List from './list'
 import Button from '@/components/ui/button'
 import Modal from '@/components/ui/modal'
 import CommandPalette from '@/components/command-palette'
+import SelectDraftModal from '@/components/select-draft-modal'
 
 const TABS = ['default', 'settings', 'list', 'results', 'share'] as const
 
@@ -47,6 +49,7 @@ export default function DraftForm(draft: DraftNote) {
     }
   }, [tab])
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false)
+  const [isSetOptionsModalOpen, setIsSetOptionsModalOpen] = useState(false)
   const {
     register,
     handleSubmit,
@@ -133,7 +136,18 @@ export default function DraftForm(draft: DraftNote) {
               placeholder='categories'
               {...register('categories')}
             />
-            <label className='px-2'>options</label>
+            <div className='flex space-x-4'>
+              <label className='px-2'>options</label>
+              <button
+                className='text-cb-yellow hover:text-cb-yellow/75 disabled:pointer-events-none disabled:text-cb-light-blue'
+                type='button'
+                onClick={() => {
+                  setIsSetOptionsModalOpen(true)
+                }}
+              >
+                <DocumentArrowDownIcon className='h-6 w-6' />
+              </button>
+            </div>
             <textarea
               className='w-full flex-grow border-cobalt bg-cobalt caret-cb-yellow focus:border-cb-light-blue focus:ring-0'
               placeholder='options'
@@ -305,6 +319,13 @@ export default function DraftForm(draft: DraftNote) {
             },
           },
         ]}
+      />
+      <SelectDraftModal
+        isOpen={isSetOptionsModalOpen}
+        setIsOpen={setIsSetOptionsModalOpen}
+        onSelectDraft={selectedDraft => {
+          setValue('options', selectedDraft.body, { shouldDirty: true })
+        }}
       />
     </form>
   )

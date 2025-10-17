@@ -90,7 +90,7 @@ export default function LiveDraft(draft: DraftNote) {
           </div>
         ) : tab === 'settings' ? (
           <div className='flex flex-grow flex-col'>
-            <Settings register={register} />
+            <Settings register={register} setValue={setValue} />
           </div>
         ) : tab === 'pass' ? (
           <div className='flex flex-grow flex-col'>

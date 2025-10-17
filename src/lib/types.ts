@@ -7,6 +7,8 @@ export type Note = {
   tags: string[]
 }
 
+export type NoteWithDraft = Note & { hasDraft: boolean }
+
 export type Draft = {
   title: string
   items: string[]

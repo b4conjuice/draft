@@ -1,16 +1,22 @@
 'use client'
 
+import { useState } from 'react'
 import { useForm, type SubmitHandler } from 'react-hook-form'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { ChevronLeftIcon } from '@heroicons/react/20/solid'
+import {
+  ChevronLeftIcon,
+  DocumentArrowDownIcon,
+} from '@heroicons/react/20/solid'
 
 import { Main } from '@/components/ui'
 import { saveNote, saveRelatedDraft } from '@/server/actions'
 import { type DraftFields } from '@/lib/types'
+import SelectDraftModal from '@/components/select-draft-modal'
 
 export default function Form() {
   const router = useRouter()
+  const [isSetOptionsModalOpen, setIsSetOptionsModalOpen] = useState(false)
   const draft = {
     title: '',
     teams: [],
@@ -22,6 +28,7 @@ export default function Form() {
     register,
     handleSubmit,
     formState: { isDirty },
+    setValue,
   } = useForm<DraftFields>({
     defaultValues: {
       title: draft.title,
@@ -77,7 +84,18 @@ export default function Form() {
             placeholder='categories'
             {...register('categories')}
           />
-          <label className='px-2'>options</label>
+          <div className='flex space-x-4'>
+            <label className='px-2'>options</label>
+            <button
+              className='text-cb-yellow hover:text-cb-yellow/75 disabled:pointer-events-none disabled:text-cb-light-blue'
+              type='button'
+              onClick={() => {
+                setIsSetOptionsModalOpen(true)
+              }}
+            >
+              <DocumentArrowDownIcon className='h-6 w-6' />
+            </button>
+          </div>
           <textarea
             className='w-full flex-grow border-cobalt bg-cobalt caret-cb-yellow focus:border-cb-light-blue focus:ring-0'
             placeholder='options'
@@ -104,6 +122,13 @@ export default function Form() {
           </div>
         </footer>
       </form>
+      <SelectDraftModal
+        isOpen={isSetOptionsModalOpen}
+        setIsOpen={setIsSetOptionsModalOpen}
+        onSelectDraft={selectedDraft => {
+          setValue('options', selectedDraft.body, { shouldDirty: true })
+        }}
+      />
     </>
   )
 }
