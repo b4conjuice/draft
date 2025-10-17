@@ -1,9 +1,23 @@
+import type { Metadata } from 'next'
 import { auth } from '@clerk/nextjs/server'
 
 import { getDraft } from '@/server/actions'
 import Results from '@/app/drafts/[id]/results'
 import TopNav from '@/app/_components/topNav'
 import LiveDraft from './live-draft'
+
+export async function generateMetadata({
+  params,
+}: {
+  params: { id: string }
+}): Promise<Metadata> {
+  const draft = await getDraft(Number(params.id))
+  const { title } = draft
+
+  return {
+    title,
+  }
+}
 
 export default async function DraftPage({
   params,

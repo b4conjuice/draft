@@ -1,3 +1,4 @@
+import type { Metadata } from 'next'
 import { auth } from '@clerk/nextjs/server'
 import { ArrowRightStartOnRectangleIcon } from '@heroicons/react/20/solid'
 import { SignedIn, SignedOut, SignInButton, UserButton } from '@clerk/nextjs'
@@ -7,6 +8,19 @@ import DraftForm from './form'
 import getUsername from '@/lib/getUsername'
 import TopNavTitle from '@/app/_components/topNavTitle'
 import Results from './results'
+
+export async function generateMetadata({
+  params,
+}: {
+  params: { id: string }
+}): Promise<Metadata> {
+  const draft = await getDraft(Number(params.id))
+  const { title } = draft
+
+  return {
+    title,
+  }
+}
 
 async function TopNav() {
   const username = await getUsername()
