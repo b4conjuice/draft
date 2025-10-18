@@ -1,8 +1,58 @@
 'use client'
 
+import { Switch } from '@headlessui/react'
 import { DocumentDuplicateIcon } from '@heroicons/react/20/solid'
-import { useCopyToClipboard } from '@uidotdev/usehooks'
+import { useCopyToClipboard, useLocalStorage } from '@uidotdev/usehooks'
+import classNames from 'classnames'
 import { toast } from 'react-toastify'
+
+function getLeague({
+  teams,
+  items,
+  thirdRoundReversal = false,
+}: {
+  teams: string[]
+  items: string[]
+  thirdRoundReversal?: boolean
+}) {
+  const teamsCount = teams.length
+  const league = items.reduce<string[][]>((finalItems, item, index) => {
+    const round = Math.ceil((index + 1) / teamsCount)
+    const pickInRound = index % teamsCount // 0-indexed pick within the current round
+    let teamIndex: number
+
+    if (thirdRoundReversal && round >= 3) {
+      if (round === 1) {
+        teamIndex = pickInRound // Standard
+      } else if (round === 2 || round === 3) {
+        teamIndex = teamsCount - 1 - pickInRound // Reverse
+      } else {
+        teamIndex =
+          round % 2 === 0
+            ? pickInRound // Even rounds (4, 6, 8...) are standard
+            : teamsCount - 1 - pickInRound // Odd rounds (5, 7, 9...) are reverse
+      }
+    } else {
+      // Standard snake draft logic for non-3RR or first 2 rounds of 3RR
+      teamIndex =
+        round % 2 === 1
+          ? pickInRound // Odd rounds (1, 3, 5...) go in standard order
+          : teamsCount - 1 - pickInRound // Even rounds (2, 4, 6...) go in reverse order
+    }
+
+    if (finalItems[teamIndex]) {
+      finalItems[teamIndex]?.push(
+        `${index + 1} ${item} (${round}-${pickInRound + 1})`
+      )
+    } else {
+      finalItems[teamIndex] = [
+        `${index + 1} ${item} (${round}-${pickInRound + 1})`,
+      ]
+    }
+    return finalItems
+  }, [])
+  return league
+}
 
 export default function Results({
   items,
@@ -11,27 +61,18 @@ export default function Results({
   items: string[]
   teams: string[]
 }) {
+  const [thirdRoundReversal, setThirdRoundReversal] = useLocalStorage<boolean>(
+    's4--draft-third-round-reversal',
+    false
+  )
   const [copiedText, copyToClipboard] = useCopyToClipboard()
-  const teamsCount = teams.length
-  const league = items.reduce<string[][]>((finalItems, item, index) => {
-    const round = Math.ceil((index + 1) / teamsCount)
-    const teamIndex =
-      round % 2 === 1
-        ? index % teamsCount
-        : teamsCount - 1 - (index % teamsCount)
-    if (finalItems[teamIndex]) {
-      finalItems[teamIndex]?.push(
-        `${index + 1} ${item} (${round}-${(index % teamsCount) + 1})`
-      )
-    } else {
-      finalItems[teamIndex] = [
-        `${index + 1} ${item} (${round}-${(index % teamsCount) + 1})`,
-      ]
-    }
-    return finalItems
-  }, [])
+  const league = getLeague({
+    items,
+    teams,
+    thirdRoundReversal,
+  })
   return (
-    <>
+    <div className='flex flex-grow flex-col'>
       <h2 className='px-2'>items</h2>
       <div className='relative'>
         <div className='absolute right-2 top-2'>
@@ -54,7 +95,26 @@ export default function Results({
           ))}
         </ol>
       </div>
-      <h2 className='px-2'>teams</h2>
+      <div className='flex space-x-4'>
+        <h2 className='px-2'>teams</h2>
+        <div
+          className={classNames(
+            'flex gap-2',
+            !thirdRoundReversal && 'opacity-40'
+          )}
+        >
+          <span>3rd round reversal</span>
+          <Switch
+            checked={!thirdRoundReversal}
+            onChange={() => {
+              setThirdRoundReversal(!thirdRoundReversal)
+            }}
+            className='group inline-flex h-6 w-11 items-center rounded-full bg-cb-blue transition'
+          >
+            <span className='size-4 translate-x-1 rounded-full bg-cb-yellow transition group-data-[checked]:translate-x-6' />
+          </Switch>
+        </div>
+      </div>
       <div className='relative'>
         <div className='absolute right-2 top-2'>
           <button
@@ -87,6 +147,6 @@ export default function Results({
           ))}
         </ul>
       </div>
-    </>
+    </div>
   )
 }
