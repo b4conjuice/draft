@@ -172,6 +172,28 @@ export default function Board({
       title: `${hideDrafted ? 'Show' : 'Hide'} Drafted`,
       action: () => setHideDrafted(!hideDrafted),
     },
+    {
+      id: 'add-placeholder',
+      title: 'Draft placeholder',
+      action: () => {
+        draft('placeholder')
+      },
+    },
+    {
+      id: 'edit-last-drafted',
+      title: 'Edit last drafted',
+      action: () => {
+        setIsEditItemModalOpen(true)
+        setItemIndex(0)
+      },
+    },
+    {
+      id: 'delete-last-drafted',
+      title: 'Delete last drafted',
+      action: () => {
+        undraft(0)
+      },
+    },
   ]
   return (
     <>
