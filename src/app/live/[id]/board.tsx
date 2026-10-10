@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import {
   Cog6ToothIcon,
   PlusCircleIcon,
@@ -96,6 +96,25 @@ export default function Board({
   setDrafted: (newDraft: string[]) => void
   settings: { teams: string[]; options: string[] }
 }) {
+  const [filter, setFilter] = useState('')
+  const filterRef = useRef<HTMLInputElement | null>(null)
+  useEffect(() => {
+    function onKeydown(e: KeyboardEvent) {
+      const filterRefIsFocused = filterRef.current === document.activeElement
+
+      if (e.key === 'f' && (e.metaKey || e.ctrlKey)) {
+        filterRef.current?.focus()
+        e.preventDefault()
+      }
+      if (e.key === 'Escape' && filterRefIsFocused) {
+        setFilter('')
+      }
+    }
+    window.addEventListener('keydown', onKeydown)
+    return () => {
+      window.removeEventListener('keydown', onKeydown)
+    }
+  }, [])
   const [queue, setQueue] = useLocalStorage<string[]>('s4-live-draft-queue', [])
   const [ranks, setRanks] = useLocalStorage<Rank[]>('s4-live-draft-ranks', [])
   const [hideDrafted, setHideDrafted] = useLocalStorage<boolean>(
@@ -123,7 +142,7 @@ export default function Board({
     const newDrafted = [item, ...drafted]
     setDrafted(newDrafted)
     unqueue(item)
-    // setFilter('')
+    setFilter('')
   }
   const undraft = (index: number) => {
     const newDrafted = [...drafted]
@@ -199,6 +218,14 @@ export default function Board({
     <>
       <div className='flex flex-col divide-x divide-cb-dusty-blue overflow-x-auto md:flex-row'>
         <div className='h-[50vh] overflow-y-auto bg-cb-dark-blue md:sticky md:left-0 md:h-auto md:w-[350px]'>
+          <input
+            type='text'
+            value={filter}
+            onChange={e => setFilter(e.target.value)}
+            placeholder='filter items'
+            ref={filterRef}
+            className='w-full bg-cb-blue p-2'
+          />
           <h2 className='flex justify-between space-x-4 p-2'>
             <span>queue</span>
             <button
@@ -359,7 +386,13 @@ export default function Board({
                       const isDrafted = drafted.some(
                         p => p === normalizedItemName
                       )
-                      if (hideDrafted && isDrafted) {
+                      if (
+                        (hideDrafted && isDrafted) ||
+                        (filter &&
+                          !normalizedItemName
+                            .toLowerCase()
+                            .includes(filter.toLowerCase()))
+                      ) {
                         return null
                       }
                       return (
