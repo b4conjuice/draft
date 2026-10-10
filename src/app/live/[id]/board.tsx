@@ -346,10 +346,10 @@ export default function Board({
                               compareRank(rank)
                             }}
                           >
-                            {rank.title}
+                            {rank.title.substring(0, 29)}
                           </button>
                         ) : (
-                          rank.title
+                          rank.title.substring(0, 29)
                         )}
                         {isProjection ? (
                           <button
