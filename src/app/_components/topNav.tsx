@@ -7,7 +7,7 @@ import getUsername from '@/lib/getUsername'
 export default async function TopNav({ title }: { title?: string }) {
   const username = await getUsername()
   return (
-    <div className='container mx-auto mb-2 flex w-full max-w-screen-md items-center px-2 pt-2 md:px-0'>
+    <div className='mb-2 flex w-full items-center px-2 pt-2'>
       <TopNavTitle title={title} />
       <div className='flex flex-grow justify-end'>
         <SignedOut>
