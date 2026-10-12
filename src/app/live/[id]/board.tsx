@@ -176,16 +176,16 @@ export default function Board({
         },
       }
     }),
-    ...available.map(option => {
-      return {
-        id: `queue-${option}`,
-        title: `Queue ${option}`,
-        name: option,
-        action: () => {
-          addToQueue(option)
-        },
-      }
-    }),
+    // ...available.map(option => {
+    //   return {
+    //     id: `queue-${option}`,
+    //     title: `Queue ${option}`,
+    //     name: option,
+    //     action: () => {
+    //       addToQueue(option)
+    //     },
+    //   }
+    // }),
     {
       id: `Toggle Hide Drafted`,
       title: `${hideDrafted ? 'Show' : 'Hide'} Drafted`,
