@@ -73,28 +73,6 @@ export default function Results({
   })
   return (
     <div className='flex flex-grow flex-col'>
-      <h2 className='px-2'>items</h2>
-      <div className='relative'>
-        <div className='absolute right-2 top-2'>
-          <button
-            className='flex w-full justify-center text-cb-yellow hover:text-cb-yellow/75 disabled:pointer-events-none disabled:opacity-25'
-            type='submit'
-            onClick={async () => {
-              await copyToClipboard(
-                items.map((item, index) => `${index + 1} ${item}`).join('\n')
-              )
-              toast.success('copied items to clipboard')
-            }}
-          >
-            <DocumentDuplicateIcon className='h-6 w-6' />
-          </button>
-        </div>
-        <ol className='list-decimal bg-cobalt p-2 pl-8'>
-          {items.map((item, index) => (
-            <li key={index}>{item}</li>
-          ))}
-        </ol>
-      </div>
       <div className='flex space-x-4'>
         <h2 className='px-2'>teams</h2>
         <div
@@ -146,6 +124,28 @@ export default function Results({
             </li>
           ))}
         </ul>
+      </div>
+      <h2 className='px-2'>items</h2>
+      <div className='relative'>
+        <div className='absolute right-2 top-2'>
+          <button
+            className='flex w-full justify-center text-cb-yellow hover:text-cb-yellow/75 disabled:pointer-events-none disabled:opacity-25'
+            type='submit'
+            onClick={async () => {
+              await copyToClipboard(
+                items.map((item, index) => `${index + 1} ${item}`).join('\n')
+              )
+              toast.success('copied items to clipboard')
+            }}
+          >
+            <DocumentDuplicateIcon className='h-6 w-6' />
+          </button>
+        </div>
+        <ol className='list-decimal bg-cobalt p-2 pl-8'>
+          {items.map((item, index) => (
+            <li key={index}>{item}</li>
+          ))}
+        </ol>
       </div>
     </div>
   )
