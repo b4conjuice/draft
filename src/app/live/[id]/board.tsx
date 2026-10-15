@@ -319,7 +319,7 @@ export default function Board({
             itemContainerClassName='flex items-center space-x-4 p-2 odd:bg-cb-blue'
           />
         </div>
-        <div className='flex h-[50vh] divide-x divide-cb-dusty-blue overflow-x-auto overflow-y-auto md:h-auto'>
+        <div className='flex h-[50vh] grow divide-x divide-cb-dusty-blue overflow-x-auto overflow-y-auto md:h-auto'>
           {columns.map((rank, rankIndex) => {
             const isProjection = rankIndex === 0
             const isRank = rankIndex > 0
