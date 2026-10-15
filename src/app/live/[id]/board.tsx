@@ -166,13 +166,16 @@ export default function Board({
     option => !drafted?.some(item => item === option)
   )
   const commands = [
-    ...available.map(option => {
+    ...available.map((availableOption, index) => {
+      const projectedRankIndex = options.findIndex(
+        option => option === availableOption
+      )
       return {
-        id: `draft-${option}`,
-        title: `Draft ${option}`,
-        name: option,
+        id: `draft-${availableOption}`,
+        title: `Draft ${availableOption} (${projectedRankIndex + 1}) at pick ${drafted.length + 1}`,
+        name: availableOption,
         action: () => {
-          draft(option)
+          draft(availableOption)
         },
       }
     }),
