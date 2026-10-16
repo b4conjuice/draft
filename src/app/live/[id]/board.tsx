@@ -170,9 +170,13 @@ export default function Board({
       const projectedRankIndex = options.findIndex(
         option => option === availableOption
       )
+      const projectedRank = projectedRankIndex + 1
+      const pick = drafted.length + 1
+      const difference = pick - projectedRank
+      const absoluteDifference = Math.abs(difference)
       return {
         id: `draft-${availableOption}`,
-        title: `Draft ${availableOption} (${projectedRankIndex + 1}) at pick ${drafted.length + 1}`,
+        title: `Draft ${availableOption} (${projectedRank}) at pick ${pick} (${difference > 0 ? '+' : '-'}${absoluteDifference})`,
         name: availableOption,
         action: () => {
           draft(availableOption)
