@@ -35,7 +35,7 @@ export default async function DraftListPage({
                 {note.hasDraft ? (
                   <Link
                     className='w-full py-4 text-cb-pink hover:text-cb-pink/75 group-first:pt-0'
-                    href={`/drafts/${note.id}`}
+                    href={`/live/${note.id}`}
                   >
                     <div>
                       <div>{note.title}</div>
@@ -63,7 +63,7 @@ export default async function DraftListPage({
                           }
                           await saveRelatedDraft(newDraft)
                           revalidatePath('/drafts')
-                          redirect(`/drafts/${note.id}`)
+                          redirect(`/live/${note.id}`)
                         }}
                       >
                         <button
