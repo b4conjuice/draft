@@ -102,7 +102,7 @@ export default function Board({
     function onKeydown(e: KeyboardEvent) {
       const filterRefIsFocused = filterRef.current === document.activeElement
 
-      if (e.key === 'f' && (e.metaKey || e.ctrlKey)) {
+      if (e.key === 'f' && e.ctrlKey) {
         filterRef.current?.focus()
         e.preventDefault()
       }
